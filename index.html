@@ -10,361 +10,328 @@
 :root{--bg:#06060b;--bg2:#0c0c14;--s:#111119;--s2:#17171f;--bd:#222233;--bd2:#2e2e44;--t:#dddde8;--t2:#9999ae;--t3:#5e5e72;--w:#f0f0f8;--gold:#c9a84c;--gold-d:rgba(201,168,76,.12);--blue:#5a7aff;--cyan:#00c8dd;--green:#10b981;--green-d:rgba(16,185,129,.12);--red:#ef4444;--orange:#f59e0b;--purple:#a855f7;--r:10px}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--t);line-height:1.65;min-height:100vh}
-
-/* === HEADER === */
+/* --- Setup Wizard --- */
+.setup{max-width:700px;margin:0 auto;padding:60px 24px}
+.setup h1{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--w);margin-bottom:8px}
+.setup h1 em{font-style:italic;color:var(--gold)}
+.setup-sub{color:var(--t2);font-size:14px;margin-bottom:32px}
+.setup-step{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.setup-step-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;margin-bottom:8px}
+.setup-step-title{font-size:16px;font-weight:700;color:var(--w);margin-bottom:8px}
+.setup-step p{font-size:13px;color:var(--t2);margin-bottom:10px}
+.setup-code{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#aab;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;position:relative;margin-bottom:10px}
+.setup-copy{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 14px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;margin-bottom:10px}.setup-copy:hover{border-color:var(--gold);color:var(--gold)}.setup-copy.ok{border-color:var(--green);color:var(--green)}
+.setup-url-row{display:flex;gap:10px;align-items:center;margin-top:12px}
+.setup-url-input{flex:1;background:var(--bg2);border:2px solid var(--bd2);border-radius:8px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--w);outline:none}.setup-url-input:focus{border-color:var(--gold)}
+.setup-url-input::placeholder{color:var(--t3)}
+.setup-connect{font-family:'JetBrains Mono',monospace;font-size:13px;padding:12px 28px;border-radius:8px;border:none;background:var(--gold);color:var(--bg);cursor:pointer;font-weight:600}
+.setup-msg{font-size:12px;margin-top:10px;font-family:'JetBrains Mono',monospace}
+.setup-skip{display:block;text-align:center;margin-top:20px;color:var(--t3);font-size:12px;cursor:pointer;text-decoration:underline}.setup-skip:hover{color:var(--t2)}
+/* --- Dashboard --- */
+.dashboard{display:none}
 .hd{padding:48px 24px 36px;text-align:center;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,rgba(201,168,76,.03),transparent)}
 .hd-ey{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
 .hd h1{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,48px);font-weight:600;color:var(--w);margin-bottom:6px}
 .hd h1 em{font-style:italic;color:var(--gold)}
 .hd-sub{font-size:13px;color:var(--t2);max-width:540px;margin:0 auto}
-
-/* Connection */
-.conn{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;border:1px solid var(--bd)}
+.conn{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;border:1px solid var(--bd);cursor:pointer}
 .conn-dot{width:7px;height:7px;border-radius:50%}
-.conn.loading .conn-dot{background:var(--orange);animation:bk 1s infinite}
 .conn.ok .conn-dot{background:var(--green)}.conn.ok{border-color:rgba(16,185,129,.3);color:var(--green)}
-.conn.err .conn-dot{background:var(--red)}.conn.err{border-color:rgba(239,68,68,.3);color:var(--red)}
 .conn.local .conn-dot{background:var(--orange)}.conn.local{border-color:rgba(245,158,11,.3);color:var(--orange)}
-
-/* Settings panel */
-.stog{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 16px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s;margin-top:8px}.stog:hover{border-color:var(--gold);color:var(--gold)}
-.sp{max-height:0;overflow:hidden;transition:max-height .3s;max-width:600px;margin:0 auto}.sp.open{max-height:300px;margin-top:14px}
-.sp-in{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px}
-.sp-lb{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);letter-spacing:1px;margin-bottom:6px}
-.sp-row{display:flex;gap:8px;align-items:center}
-.sp-input{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t);outline:none}.sp-input:focus{border-color:var(--gold)}.sp-input::placeholder{color:var(--t3)}
-.sp-save{font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 20px;border-radius:6px;border:none;background:var(--gold);color:var(--bg);cursor:pointer;font-weight:500}
-.sp-msg{font-size:11px;margin-top:8px;font-family:'JetBrains Mono',monospace}
-
-/* Toast */
 .toast{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:8px;font-size:11px;font-family:'JetBrains Mono',monospace;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}.toast.ok{background:var(--green);color:#fff}.toast.fail{background:var(--red);color:#fff}
-
-/* Now box */
 .now{max-width:600px;margin:24px auto 0}
 .now-lb{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:8px}
 .now-lb::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);animation:bk 1.6s ease-in-out infinite}
 @keyframes bk{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(201,168,76,.5)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(201,168,76,0)}}
-.now-in{width:100%;background:var(--s);border:2px solid var(--bd2);border-radius:var(--r);padding:13px 16px;font-family:'Noto Sans JP',sans-serif;font-size:20px;font-weight:700;color:var(--w);text-align:center;outline:none;transition:border-color .3s,box-shadow .3s}
-.now-in::placeholder{color:var(--t3);font-weight:400;font-size:15px}.now-in:focus{border-color:var(--gold);box-shadow:0 0 0 4px var(--gold-d)}
-
-/* Progress */
+.now-in{width:100%;background:var(--s);border:2px solid var(--bd2);border-radius:var(--r);padding:13px 16px;font-family:'Noto Sans JP',sans-serif;font-size:20px;font-weight:700;color:var(--w);text-align:center;outline:none}.now-in::placeholder{color:var(--t3);font-weight:400;font-size:15px}.now-in:focus{border-color:var(--gold);box-shadow:0 0 0 4px var(--gold-d)}
 .gp{max-width:600px;margin:18px auto 0;display:flex;align-items:center;gap:12px}
-.gp-tr{flex:1;height:5px;border-radius:3px;background:var(--bd);overflow:hidden}
-.gp-fl{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .5s}
-.gp-lb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2);white-space:nowrap}
-
-/* Stats */
+.gp-tr{flex:1;height:5px;border-radius:3px;background:var(--bd);overflow:hidden}.gp-fl{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .5s}.gp-lb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2);white-space:nowrap}
 .sts{display:flex;justify-content:center;gap:28px;margin-top:18px;flex-wrap:wrap}
 .st{text-align:center}.st-n{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500}.st-l{font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase}
-
-/* Buttons */
 .ex-bar{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
-.ex-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 16px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s}.ex-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-/* Filter */
+.ex-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 16px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer}.ex-btn:hover{border-color:var(--gold);color:var(--gold)}
 .fb{position:sticky;top:0;z-index:100;background:rgba(6,6,11,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.fb-b{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 12px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s}.fb-b:hover{border-color:var(--gold);color:var(--gold)}.fb-b.on{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
+.fb-b{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 12px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer}.fb-b:hover{border-color:var(--gold);color:var(--gold)}.fb-b.on{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
 .fb-s{margin-left:auto;background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--t);outline:none;width:160px;font-family:'Noto Sans JP',sans-serif}.fb-s:focus{border-color:var(--gold)}
-
-/* Main */
 .mn{max-width:1000px;margin:0 auto;padding:20px 16px 100px}
-
-/* Chapter */
-.ch{margin-bottom:32px}
-.ch-h{display:flex;align-items:center;gap:12px;padding:14px 0 8px;border-bottom:1px solid var(--bd);margin-bottom:10px;cursor:pointer;user-select:none}
+.ch{margin-bottom:32px}.ch-h{display:flex;align-items:center;gap:12px;padding:14px 0 8px;border-bottom:1px solid var(--bd);margin-bottom:10px;cursor:pointer;user-select:none}
 .ch-badge{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:600;color:var(--gold);border:1px solid rgba(201,168,76,.3);border-radius:6px;padding:2px 9px;flex-shrink:0}
-.ch-t{font-size:15px;font-weight:700;color:var(--w);flex:1}
-.ch-p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3)}
-.ch-tog{font-size:10px;color:var(--t3);transition:transform .2s}
-.ch.clp .ch-tog{transform:rotate(-90deg)}.ch.clp .ch-bd{display:none}
-
-/* Section */
-.sg{margin-left:10px;padding-left:12px;border-left:2px solid var(--bd);margin-bottom:14px}
-.sg-lb{font-size:12px;font-weight:600;color:var(--t2);padding:6px 0 4px}
-
-/* Item */
+.ch-t{font-size:15px;font-weight:700;color:var(--w);flex:1}.ch-p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3)}
+.ch-tog{font-size:10px;color:var(--t3);transition:transform .2s}.ch.clp .ch-tog{transform:rotate(-90deg)}.ch.clp .ch-bd{display:none}
+.sg{margin-left:10px;padding-left:12px;border-left:2px solid var(--bd);margin-bottom:14px}.sg-lb{font-size:12px;font-weight:600;color:var(--t2);padding:6px 0 4px}
 .it{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:5px;overflow:hidden;transition:border-color .2s,opacity .3s}.it:hover{border-color:var(--bd2)}.it.ad{opacity:.4}
 .it-h{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;min-height:44px}
 .it-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);width:46px;flex-shrink:0}
-.it-pri{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;flex-shrink:0;cursor:pointer;transition:all .2s;border:1px solid transparent;user-select:none}
-.pri-high{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.3)}
-.pri-mid{background:rgba(245,158,11,.12);color:var(--orange);border-color:rgba(245,158,11,.3)}
-.pri-low{background:rgba(100,100,140,.1);color:var(--t3);border-color:rgba(100,100,140,.2)}
-.pri-none{background:transparent;color:var(--t3);border:1px dashed var(--bd)}
-.it-nm{flex:1;font-size:13px;font-weight:500;color:var(--w);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.it.ad .it-nm{text-decoration:line-through;text-decoration-color:var(--t3)}
+.it-pri{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;flex-shrink:0;cursor:pointer;border:1px solid transparent;user-select:none}
+.pri-high{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.3)}.pri-mid{background:rgba(245,158,11,.12);color:var(--orange);border-color:rgba(245,158,11,.3)}.pri-low{background:rgba(100,100,140,.1);color:var(--t3);border-color:rgba(100,100,140,.2)}.pri-none{background:transparent;color:var(--t3);border:1px dashed var(--bd)}
+.it-nm{flex:1;font-size:13px;font-weight:500;color:var(--w);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.it.ad .it-nm{text-decoration:line-through;text-decoration-color:var(--t3)}
 .it-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);flex-shrink:0}
-.wd{display:flex;gap:2px;flex-shrink:0}
-.wd-d{width:7px;height:7px;border-radius:2px;background:var(--bd);transition:background .2s}.wd-d.dn{background:var(--green)}.wd-d.lk{opacity:.4}
+.wd{display:flex;gap:2px;flex-shrink:0}.wd-d{width:7px;height:7px;border-radius:2px;background:var(--bd)}.wd-d.dn{background:var(--green)}.wd-d.lk{opacity:.4}
 .it-ch{font-size:9px;color:var(--t3);transition:transform .2s;flex-shrink:0}.it.op .it-ch{transform:rotate(90deg)}
 .it-dt{max-height:0;overflow:hidden;transition:max-height .4s ease}.it.op .it-dt{max-height:8000px}
 .dt-in{padding:12px 14px 14px;border-top:1px solid var(--bd)}
-
-/* Workflow step */
 .wf{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.03)}.wf:last-child{border-bottom:none}
 .wf-ck{width:20px;height:20px;border-radius:5px;border:2px solid var(--bd2);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
-.wf-ck:hover{border-color:var(--green);background:var(--green-d)}
-.wf-ck.on{border-color:var(--green);background:var(--green)}.wf-ck.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700}
+.wf-ck:hover{border-color:var(--green);background:var(--green-d)}.wf-ck.on{border-color:var(--green);background:var(--green)}.wf-ck.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700}
 .wf-ck.lk{border-color:var(--bd);background:rgba(40,40,55,.5);cursor:not-allowed;opacity:.4}.wf-ck.lk:hover{border-color:var(--bd);background:rgba(40,40,55,.5)}.wf-ck.lk::after{content:'🔒';font-size:9px}
-.wf-i{flex:1;min-width:0}
-.wf-tl{font-size:12px;font-weight:600;color:var(--t);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.wf-i{flex:1;min-width:0}.wf-tl{font-size:12px;font-weight:600;color:var(--t);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .wf-tl .tg{font-family:'JetBrains Mono',monospace;font-size:8px;padding:1px 6px;border-radius:3px;letter-spacing:.5px}
 .tg-d{background:rgba(245,158,11,.15);color:var(--orange)}.tg-c{background:rgba(16,185,129,.15);color:var(--green)}.tg-r{background:rgba(99,102,241,.15);color:var(--blue)}.tg-y{background:rgba(239,68,68,.15);color:var(--red)}.tg-s{background:rgba(90,122,255,.15);color:var(--blue)}.tg-n{background:rgba(168,85,247,.15);color:var(--purple)}.tg-f{background:rgba(0,200,221,.15);color:var(--cyan)}
-.wf-sb{font-size:10px;color:var(--t3);margin-top:1px}
-.wf-ts{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);margin-top:2px}
-.wf-lk-msg{font-size:10px;color:var(--t3);font-style:italic;margin-top:2px}
-.wf-link-row{display:flex;gap:6px;margin-top:4px;align-items:center}
-.wf-link-in{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:3px 8px;font-size:10px;color:var(--t);font-family:'JetBrains Mono',monospace;outline:none}.wf-link-in:focus{border-color:var(--gold)}.wf-link-in::placeholder{color:var(--t3)}
-.wf-link-go{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--t3);font-family:'JetBrains Mono',monospace;transition:all .2s;text-decoration:none}.wf-link-go:hover{border-color:var(--cyan);color:var(--cyan)}
-.wf-pb{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;transition:all .2s;flex-shrink:0;margin-top:1px}.wf-pb:hover{border-color:var(--gold);color:var(--gold)}
+.wf-sb{font-size:10px;color:var(--t3);margin-top:1px}.wf-ts{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);margin-top:2px}.wf-lk-msg{font-size:10px;color:var(--t3);font-style:italic;margin-top:2px}
+.wf-link-row{display:flex;gap:6px;margin-top:4px;align-items:center}.wf-link-in{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:3px 8px;font-size:10px;color:var(--t);font-family:'JetBrains Mono',monospace;outline:none}.wf-link-in:focus{border-color:var(--gold)}.wf-link-in::placeholder{color:var(--t3)}
+.wf-link-go{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--t3);font-family:'JetBrains Mono',monospace;text-decoration:none}.wf-link-go:hover{border-color:var(--cyan);color:var(--cyan)}
+.wf-pb{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;flex-shrink:0;margin-top:1px}.wf-pb:hover{border-color:var(--gold);color:var(--gold)}
 .wf-pm{max-height:0;overflow:hidden;transition:max-height .3s,margin .3s}.wf-pm.op{max-height:2000px;margin-top:6px}
 .wf-pi{background:var(--s);border:1px solid var(--bd);border-radius:7px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:#b8b8cc;white-space:pre-wrap;word-break:break-all;position:relative}
-.wf-cp{position:absolute;top:6px;right:6px;font-size:9px;padding:2px 8px;border-radius:4px;border:1px solid var(--bd);background:var(--bg2);color:var(--t3);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s}.wf-cp:hover{border-color:var(--gold);color:var(--gold)}.wf-cp.ok{border-color:var(--green);color:var(--green)}
+.wf-cp{position:absolute;top:6px;right:6px;font-size:9px;padding:2px 8px;border-radius:4px;border:1px solid var(--bd);background:var(--bg2);color:var(--t3);cursor:pointer;font-family:'JetBrains Mono',monospace}.wf-cp:hover{border-color:var(--gold);color:var(--gold)}.wf-cp.ok{border-color:var(--green);color:var(--green)}
 .it-nw{margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)}.it-nl{font-size:9px;color:var(--t3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:3px}
 .it-nt{width:100%;background:var(--s);border:1px solid var(--bd);border-radius:5px;padding:6px 8px;font-size:11px;color:var(--t);font-family:'Noto Sans JP',sans-serif;outline:none;resize:vertical;min-height:32px}.it-nt:focus{border-color:var(--gold)}
 .ft{text-align:center;padding:28px 20px;font-size:10px;color:var(--t3);border-top:1px solid var(--bd)}
 .hidden{display:none!important}
-.loading-ov{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}.loading-ov.gone{display:none}
-.loading-spinner{width:36px;height:36px;border:3px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}.loading-text{font-size:13px;color:var(--t2)}
 @media(max-width:640px){.it-id{width:36px;font-size:8px}.it-nm{font-size:12px}.wd-d{width:5px;height:5px}.sts{gap:14px}.fb-s{width:100px}}
 </style>
 </head>
 <body>
-<div class="loading-ov" id="lo"><div class="loading-spinner"></div><div class="loading-text">データを読み込み中…</div></div>
-<div class="toast" id="toast"></div>
 
-<div class="hd">
-  <div class="hd-ey">Content Orchestra</div>
-  <h1>調剤報酬ガイド <em>制作管理</em></h1>
-  <p class="hd-sub">静的HTML + GAS + スプレッドシート</p>
-  <div class="conn loading" id="conn"><div class="conn-dot"></div><span id="conn-text">接続中…</span></div>
-  <button class="stog" onclick="document.getElementById('sp').classList.toggle('open')">⚙ GAS設定</button>
-  <div class="sp" id="sp"><div class="sp-in">
-    <div class="sp-lb">GAS DEPLOY URL</div>
-    <div class="sp-row"><input type="text" class="sp-input" id="gas-input" placeholder="https://script.google.com/macros/s/.../exec"><button class="sp-save" onclick="saveGasUrl()">接続</button></div>
-    <div class="sp-msg" id="sp-msg"></div>
-  </div></div>
-  <div class="now"><div class="now-lb">NOW WORKING ON</div><input type="text" class="now-in" id="now-task" placeholder="今やっていることを入力…" oninput="debounceNow()"></div>
-  <div class="gp"><div class="gp-tr"><div class="gp-fl" id="gp-fl"></div></div><div class="gp-lb" id="gp-lb">0%</div></div>
-  <div class="sts">
-    <div class="st"><div class="st-n" id="s-tot" style="color:var(--w)">0</div><div class="st-l">全項目</div></div>
-    <div class="st"><div class="st-n" id="s-dn" style="color:var(--green)">0</div><div class="st-l">完了</div></div>
-    <div class="st"><div class="st-n" id="s-wp" style="color:var(--orange)">0</div><div class="st-l">作業中</div></div>
-    <div class="st"><div class="st-n" id="s-td" style="color:var(--t3)">0</div><div class="st-l">未着手</div></div>
+<!-- ========== SETUP WIZARD ========== -->
+<div class="setup" id="setup">
+  <h1>Content <em>Orchestra</em></h1>
+  <p class="setup-sub">初回セットアップ — GASバックエンドを接続してください</p>
+
+  <div class="setup-step">
+    <div class="setup-step-num">STEP 1</div>
+    <div class="setup-step-title">GASにCode.gsを貼り付ける</div>
+    <p><a href="https://script.google.com" target="_blank" style="color:var(--cyan)">script.google.com</a> →「新しいプロジェクト」→ Code.gsの中身を全部消して以下を貼り付け → Ctrl+S保存</p>
+    <div class="setup-code" id="gas-code"></div>
+    <button class="setup-copy" onclick="copyGasCode()">Code.gs をコピー</button>
   </div>
-  <div class="ex-bar"><button class="ex-btn" onclick="reload()">🔄 再読み込み</button><button class="ex-btn" onclick="exportJSON()">📥 Export JSON</button></div>
+
+  <div class="setup-step">
+    <div class="setup-step-num">STEP 2</div>
+    <div class="setup-step-title">initSheetを実行</div>
+    <p>GASエディタ上部のドロップダウンで <code>initSheet</code> を選択 →「▶ 実行」（初回は権限承認が必要）</p>
+  </div>
+
+  <div class="setup-step">
+    <div class="setup-step-num">STEP 3</div>
+    <div class="setup-step-title">デプロイしてURLを取得</div>
+    <p>「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」→ 実行者「自分」→ アクセス「全員」→「デプロイ」→ URLをコピー</p>
+  </div>
+
+  <div class="setup-step">
+    <div class="setup-step-num">STEP 4</div>
+    <div class="setup-step-title">URLを入力して接続</div>
+    <div class="setup-url-row">
+      <input type="text" class="setup-url-input" id="setup-url" placeholder="https://script.google.com/macros/s/.../exec">
+      <button class="setup-connect" onclick="connectGAS()">接続</button>
+    </div>
+    <div class="setup-msg" id="setup-msg"></div>
+  </div>
+
+  <div class="setup-skip" onclick="skipSetup()">GAS接続なしで使う（ローカル保存モード）</div>
 </div>
-<div class="fb">
-  <button class="fb-b on" onclick="setF('all',this)">ALL</button><button class="fb-b" onclick="setF('todo',this)">未着手</button><button class="fb-b" onclick="setF('wip',this)">作業中</button><button class="fb-b" onclick="setF('done',this)">完了</button>
-  <button class="fb-b" onclick="setF('high',this)">🔴高</button><button class="fb-b" onclick="setF('mid',this)">🟡中</button><button class="fb-b" onclick="setF('low',this)">⚪低</button>
-  <input type="text" class="fb-s" placeholder="検索…" oninput="searchQ=this.value;applyVis()">
+
+<!-- ========== DASHBOARD ========== -->
+<div class="dashboard" id="dashboard">
+  <div class="toast" id="toast"></div>
+  <div class="hd">
+    <div class="hd-ey">Content Orchestra</div>
+    <h1>調剤報酬ガイド <em>制作管理</em></h1>
+    <p class="hd-sub">GAS + スプレッドシート連携</p>
+    <div class="conn ok" id="conn" onclick="document.getElementById('dashboard').style.display='none';document.getElementById('setup').style.display='block'"><div class="conn-dot"></div><span id="conn-text">接続OK</span></div>
+    <div class="now"><div class="now-lb">NOW WORKING ON</div><input type="text" class="now-in" id="now-task" placeholder="今やっていることを入力…" oninput="debounceNow()"></div>
+    <div class="gp"><div class="gp-tr"><div class="gp-fl" id="gp-fl"></div></div><div class="gp-lb" id="gp-lb">0%</div></div>
+    <div class="sts"><div class="st"><div class="st-n" id="s-tot" style="color:var(--w)">0</div><div class="st-l">全項目</div></div><div class="st"><div class="st-n" id="s-dn" style="color:var(--green)">0</div><div class="st-l">完了</div></div><div class="st"><div class="st-n" id="s-wp" style="color:var(--orange)">0</div><div class="st-l">作業中</div></div><div class="st"><div class="st-n" id="s-td" style="color:var(--t3)">0</div><div class="st-l">未着手</div></div></div>
+    <div class="ex-bar"><button class="ex-btn" onclick="doReload()">🔄 再読込</button><button class="ex-btn" onclick="exportJSON()">📥 Export</button></div>
+  </div>
+  <div class="fb">
+    <button class="fb-b on" onclick="setF('all',this)">ALL</button><button class="fb-b" onclick="setF('todo',this)">未着手</button><button class="fb-b" onclick="setF('wip',this)">作業中</button><button class="fb-b" onclick="setF('done',this)">完了</button>
+    <button class="fb-b" onclick="setF('high',this)">🔴高</button><button class="fb-b" onclick="setF('mid',this)">🟡中</button><button class="fb-b" onclick="setF('low',this)">⚪低</button>
+    <input type="text" class="fb-s" placeholder="検索…" oninput="searchQ=this.value;applyVis()">
+  </div>
+  <div class="mn" id="mn"></div>
+  <div class="ft">Content Orchestra — GAS + Spreadsheet</div>
 </div>
-<div class="mn" id="mn"></div>
-<div class="ft">Content Orchestra — Static HTML + GAS + Spreadsheet</div>
 
 <script>
 // ===================================================================
-//  GAS URL（localStorageに保存）
+//  GAS Code.gs（この文字列をセットアップ画面でコピーさせる）
 // ===================================================================
-let GAS_URL = localStorage.getItem('ov5_gas_url') || '';
+var GAS_CODE = `var SS_ID = '1qHpr6VOTv2JwaS6Z2Fw-Mwm-wKu1moZ5GstFRjYonO4';
+function getSS(){return SpreadsheetApp.openById(SS_ID)}
 
-// ===================================================================
-//  JSONP通信（CORSフリー — scriptタグ経由）
-// ===================================================================
-let _jc = 0;
-
-// GASにGETリクエスト（データ取得）
-function jsonpGet() {
-  return new Promise((ok, ng) => {
-    if (!GAS_URL) return ng('No URL');
-    const cb = '_cb' + (_jc++);
-    const s = document.createElement('script');
-    window[cb] = d => { delete window[cb]; s.remove(); ok(d); };
-    s.onerror = () => { delete window[cb]; s.remove(); ng('Load error'); };
-    s.src = GAS_URL + '?action=getAll&callback=' + cb;
-    document.head.appendChild(s);
-  });
+function doGet(e){
+  var p=e?e.parameter:{},cb=p.callback||'',action=p.action||'getAll',result;
+  if(action==='getAll')result=getAllData();
+  else if(action==='post'){try{result=handlePost(JSON.parse(p.data||'{}'))}catch(er){result={error:er.message}}}
+  else result={error:'Unknown action'};
+  var j=JSON.stringify(result);
+  if(cb)return ContentService.createTextOutput(cb+'('+j+')').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  return ContentService.createTextOutput(j).setMimeType(ContentService.MimeType.JSON);
 }
 
-// GASにデータ書き込み（POST-via-GET: データをURLパラメータで送信）
-function jsonpPost(body) {
-  return new Promise((ok, ng) => {
-    if (!GAS_URL) return ng('No URL');
-    const cb = '_cb' + (_jc++);
-    const s = document.createElement('script');
-    window[cb] = d => { delete window[cb]; s.remove(); ok(d); };
-    s.onerror = () => { delete window[cb]; s.remove(); ng('Load error'); };
-    s.src = GAS_URL + '?action=post&callback=' + cb + '&data=' + encodeURIComponent(JSON.stringify(body));
-    document.head.appendChild(s);
-  });
-}
-
-// 書き込みを送信（fire-and-forget + toast）
-function send(body) {
-  if (!GAS_URL) { svL(); return; }
-  jsonpPost(body).then(r => {
-    if (r && r.ok) showToast('保存OK', 'ok');
-    else showToast('保存エラー', 'fail');
-  }).catch(() => { showToast('通信エラー（ローカル保存済）', 'fail'); svL(); });
-}
-
-function showToast(m, t) { const e = document.getElementById('toast'); e.textContent = m; e.className = 'toast ' + t + ' show'; setTimeout(() => e.classList.remove('show'), 2000); }
-
-// ===================================================================
-//  静的データ（目次構造）
-// ===================================================================
-const DATA=[
-{ch:'第1章',title:'調剤報酬の基本',sections:[{sec:'1-1',title:'調剤報酬の基本',items:[{id:'1-1-1',name:'調剤報酬の全体像（調剤技術料＋薬学管理料＋薬剤料＋特定保険医療材料料＋その他）'},{id:'1-1-2',name:'基礎点数と加算点数'}]},{sec:'1-2',title:'調剤報酬の算定単位',items:[{id:'1-2-1',name:'「調剤」「剤」について'},{id:'1-2-2',name:'処方せんの受付回数について'}]},{sec:'1-3',title:'分割調剤',items:[{id:'1-3-1',name:'14日超・保存困難による分割調剤'},{id:'1-3-2',name:'後発医薬品の初回分割調剤'},{id:'1-3-3',name:'医師の分割指示に係る分割調剤'}]},{sec:'1-4',title:'リフィル処方せん',items:[{id:'1-4-1',name:'リフィル処方せんとは'},{id:'1-4-2',name:'算定の流れと留意点'},{id:'1-4-3',name:'服薬情報等提供料との関係'}]},{sec:'1-5',title:'オンライン服薬指導',items:[{id:'1-5-1',name:'オンライン服薬指導の基本'},{id:'1-5-2',name:'対象となるケース'},{id:'1-5-3',name:'算定の流れと留意点'}]}]},
-{ch:'第2章',title:'調剤技術料',sections:[{sec:'2-1',title:'調剤技術料とは',items:[{id:'2-1',name:'調剤技術料とは'}]},{sec:'2-2',title:'調剤基本料',items:[{id:'2-2-1',name:'調剤基本料①〜③'},{id:'2-2-2',name:'特別調剤基本料A・B'}]},{sec:'2-3',title:'調剤基本料に係る加算・減算',items:[{id:'2-3-1',name:'地域支援・医薬品供給対応体制加算①〜⑤'},{id:'2-3-2',name:'連携強化加算'},{id:'2-3-3',name:'バイオ後続品調剤体制加算'},{id:'2-3-4',name:'後発医薬品減算'},{id:'2-3-5',name:'在宅薬学総合体制加算①②'},{id:'2-3-6',name:'電子的調剤情報連携体制整備加算'},{id:'2-3-7',name:'門前薬局等立地依存減算'}]},{sec:'2-4',title:'薬剤調製料',items:[{id:'2-4-1',name:'内服薬'},{id:'2-4-2',name:'屯服薬'},{id:'2-4-3',name:'浸煎薬・湯薬'},{id:'2-4-4',name:'注射薬'},{id:'2-4-5',name:'外用薬'}]},{sec:'2-5',title:'薬剤調製料に係る加算',items:[{id:'2-5-1',name:'麻薬等加算'},{id:'2-5-2',name:'無菌製剤処理加算'},{id:'2-5-3',name:'自家製剤加算'},{id:'2-5-4',name:'計量混合調剤加算'},{id:'2-5-5',name:'時間外等加算（時間外・休日・深夜）'},{id:'2-5-6',name:'夜間・休日等加算'}]}]},
-{ch:'第3章',title:'薬学管理料',sections:[{sec:'3-1',title:'薬学管理料とは',items:[{id:'3-1',name:'薬学管理料とは'}]},{sec:'3-2',title:'調剤管理料',items:[{id:'3-2',name:'調剤管理料'}]},{sec:'3-3',title:'調剤管理料に係る加算',items:[{id:'3-3-1',name:'調剤時残薬調整加算と薬学的有害事象等防止加算（イ〜ニ）'}]},{sec:'3-4',title:'服薬管理指導料',items:[{id:'3-4-1',name:'かかりつけ薬剤師とは'},{id:'3-4-2',name:'オンライン服薬指導との関係'}]},{sec:'3-5',title:'服薬管理指導料に係る加算',items:[{id:'3-5-1',name:'特定薬剤管理指導加算①②③'},{id:'3-5-2',name:'麻薬管理指導加算'},{id:'3-5-3',name:'乳幼児服薬指導加算'},{id:'3-5-4',name:'小児特定加算'},{id:'3-5-5',name:'吸入薬指導加算'},{id:'3-5-6',name:'かかりつけ薬剤師フォローアップ加算'},{id:'3-5-7',name:'かかりつけ薬剤師訪問加算'}]},{sec:'3-6',title:'外来服薬支援料',items:[{id:'3-6',name:'外来服薬支援料①・②'}]},{sec:'3-7',title:'外来服薬支援料に係る加算',items:[{id:'3-7-1',name:'施設連携加算'}]},{sec:'3-8',title:'服用薬剤調整支援料',items:[{id:'3-8',name:'服用薬剤調整支援料'}]},{sec:'3-9〜',title:'その他薬学管理料',items:[{id:'3-9',name:'調剤後薬剤管理指導料'},{id:'3-10',name:'服薬情報等提供料'},{id:'3-11',name:'経管投薬支援料'},{id:'3-12',name:'在宅患者訪問薬剤管理指導料'},{id:'3-13',name:'在宅患者訪問薬剤管理指導等に係る加算'},{id:'3-14',name:'在宅患者緊急訪問薬剤管理指導料'},{id:'3-15',name:'在宅患者緊急時等共同指導料'},{id:'3-16',name:'退院時共同指導料'},{id:'3-17',name:'在宅移行初期管理料'},{id:'3-18',name:'訪問薬剤管理医師同時指導料'},{id:'3-19',name:'複数名薬剤管理指導訪問料'}]}]},
-{ch:'第4章',title:'薬剤料',sections:[{sec:'4-1',title:'薬剤料',items:[{id:'4-1-1',name:'薬剤料の計算方法'},{id:'4-1-2',name:'多剤投与時の逓減措置'}]}]},
-{ch:'第5章',title:'特定保険医療材料料',sections:[{sec:'5-1',title:'特定保険医療材料料',items:[{id:'5-1',name:'特定保険医療材料料'}]}]},
-{ch:'第6章',title:'その他',sections:[{sec:'6-1〜',title:'その他',items:[{id:'6-1',name:'調剤ベースアップ評価料'},{id:'6-2',name:'調剤物価対応料'}]}]},
-{ch:'第7章',title:'介護報酬',sections:[{sec:'7-1〜',title:'介護報酬',items:[{id:'7-1',name:'居宅療養管理指導費'},{id:'7-2',name:'介護予防居宅療養管理指導費'},{id:'7-3',name:'単一建物居住者の考え方（医療保険との違い）'}]}]}
-];
-
-const WF=[
-{key:'s1',label:'デザイン作成',tag:'DESIGN',tc:'tg-d',sub:'Claude STARTLINE',deps:[],prompt:'「{ITEM}」を4つの公式資料から網羅的に抜粋しデザイン作成。\n手順：startline-writer → html-converter → checker\n資料外の情報は補完しない'},
-{key:'s2',label:'ファクトチェック①',tag:'CHECK',tc:'tg-c',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」のデザインHTMLを文字起こし→4資料と照合\n✅正確 ⚠️要修正 ❌誤り で報告'},
-{key:'s3',label:'競合調査',tag:'RESEARCH',tc:'tg-r',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」の競合調査。差分リスト＋追加推奨を優先度付きで出力'},
-{key:'s4',label:'デザイン修正→完成',tag:'DESIGN',tc:'tg-d',sub:'差分反映',deps:['s2','s3'],prompt:'「{ITEM}」のFC＋競合差分を反映し最終版に修正'},
-{key:'s5',label:'目次追記',tag:'FINAL',tc:'tg-f',sub:'ステータス更新',deps:['s4'],prompt:'目次に「{ITEM}」のステータスを追記'},
-{key:'s6',label:'最終FC',tag:'CHECK',tc:'tg-c',sub:'完全照合',deps:['s4'],prompt:'「{ITEM}」最終版の完全ファクトチェック'},
-{key:'s7',label:'YouTube台本',tag:'YT',tc:'tg-y',sub:'youtube-script-writer',deps:['s3'],prompt:'「{ITEM}」のYouTube台本作成。誇張/煽りなし'},
-{key:'s8',label:'スライド',tag:'SLIDE',tc:'tg-s',sub:'slide-design-pro',deps:['s3'],prompt:'「{ITEM}」のスライド作成。全情報網羅'},
-{key:'s9',label:'note記事',tag:'NOTE',tc:'tg-n',sub:'note-article',deps:['s3'],prompt:'「{ITEM}」のnote記事作成。AI臭なし'}
-];
-
-// ===================================================================
-//  ローカルステート
-// ===================================================================
-let checks={},links={},pris={},nts={},curF='all',searchQ='';
-const L={c:'o5c',l:'o5l',p:'o5p',n:'o5n',w:'o5w'};
-function gL(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return{}}}
-function svL(){try{localStorage.setItem(L.c,JSON.stringify(checks));localStorage.setItem(L.l,JSON.stringify(links));localStorage.setItem(L.p,JSON.stringify(pris));localStorage.setItem(L.n,JSON.stringify(nts))}catch(e){}}
-
-// ===================================================================
-//  初期ロード
-// ===================================================================
-async function init(){
-  const ce=document.getElementById('conn'),ct=document.getElementById('conn-text');
-  if(!GAS_URL){
-    ce.className='conn local';ct.textContent='GAS未接続（⚙設定からURL入力）';
-    checks=gL(L.c);links=gL(L.l);pris=gL(L.p);nts=gL(L.n);
-    try{const v=localStorage.getItem(L.w);if(v)document.getElementById('now-task').value=v}catch(e){}
-    document.getElementById('sp').classList.add('open');
-    render();document.getElementById('lo').classList.add('gone');return;
+function handlePost(b){
+  switch(b.action){
+    case 'updateCheck':return updateCheck(b.itemId,b.stepKey,b.checked,b.timestamp);
+    case 'updateLink':return updateLink(b.itemId,b.stepKey,b.url);
+    case 'updatePriority':return updatePriority(b.itemId,b.priority);
+    case 'updateNote':return updateNote(b.itemId,b.note);
+    case 'updateNow':return updateNowTask(b.value);
+    default:return{error:'Unknown'}
   }
-  try{
-    const d=await jsonpGet();
-    ce.className='conn ok';ct.textContent='GAS接続OK ✓';
-    if(d.items)d.items.forEach(it=>{
-      if(it.checks&&Object.keys(it.checks).length)checks[it.id]=it.checks;
-      if(it.links&&Object.keys(it.links).length)links[it.id]=it.links;
-      if(it.priority&&it.priority!=='none')pris[it.id]=it.priority;
-      if(it.note)nts[it.id]=it.note;
-    });
-    if(d.nowTask)document.getElementById('now-task').value=d.nowTask;
-    svL();
-  }catch(e){
-    ce.className='conn err';ct.textContent='GAS接続エラー（ローカル動作中）';
-    checks=gL(L.c);links=gL(L.l);pris=gL(L.p);nts=gL(L.n);
-    try{const v=localStorage.getItem(L.w);if(v)document.getElementById('now-task').value=v}catch(e){}
-  }
-  render();document.getElementById('lo').classList.add('gone');
 }
-function reload(){document.getElementById('lo').classList.remove('gone');checks={};links={};pris={};nts={};init().then(()=>showToast('再読み込み完了','ok'))}
 
-function saveGasUrl(){
-  const u=document.getElementById('gas-input').value.trim(),m=document.getElementById('sp-msg');
-  if(!u){m.style.color='var(--red)';m.textContent='URLを入力';return}
-  if(!u.startsWith('https://script.google.com/')){m.style.color='var(--red)';m.textContent='GASのURLではありません';return}
-  localStorage.setItem('ov5_gas_url',u);GAS_URL=u;
+function getAllData(){
+  var ss=getSS(),sh=ss.getSheetByName('items');
+  if(!sh||sh.getLastRow()<=1)return{items:[],nowTask:''};
+  var d=sh.getDataRange().getValues(),ks=['s1','s2','s3','s4','s5','s6','s7','s8','s9'],items=[];
+  for(var i=1;i<d.length;i++){var r=d[i];if(!r[0])continue;
+    var it={id:String(r[0]),chapter:r[1],section:r[2],name:r[3],priority:r[4]||'none',checks:{},links:{},note:r[23]||'',lastUpdated:r[24]||''};
+    for(var j=0;j<9;j++){if(r[5+j]!=='')it.checks[ks[j]]=Number(r[5+j]);if(r[14+j]!=='')it.links[ks[j]]=String(r[14+j])}
+    items.push(it)}
+  var now='',sh2=ss.getSheetByName('settings');
+  if(sh2){var sd=sh2.getDataRange().getValues();for(var i=1;i<sd.length;i++)if(sd[i][0]==='now_task')now=sd[i][1]||''}
+  return{items:items,nowTask:now}
+}
+
+function findRow_(sh,id){var ids=sh.getRange(2,1,sh.getLastRow()-1,1).getValues();for(var i=0;i<ids.length;i++)if(String(ids[i][0])===String(id))return i+2;return-1}
+function updateCheck(id,sk,checked,ts){var sh=getSS().getSheetByName('items'),r=findRow_(sh,id);if(r<0)return{error:'Not found'};sh.getRange(r,6+['s1','s2','s3','s4','s5','s6','s7','s8','s9'].indexOf(sk)).setValue(checked?ts:'');sh.getRange(r,25).setValue(new Date().toISOString());return{ok:true}}
+function updateLink(id,sk,url){var sh=getSS().getSheetByName('items'),r=findRow_(sh,id);if(r<0)return{error:'Not found'};sh.getRange(r,15+['s1','s2','s3','s4','s5','s6','s7','s8','s9'].indexOf(sk)).setValue(url);sh.getRange(r,25).setValue(new Date().toISOString());return{ok:true}}
+function updatePriority(id,p){var sh=getSS().getSheetByName('items'),r=findRow_(sh,id);if(r<0)return{error:'Not found'};sh.getRange(r,5).setValue(p);sh.getRange(r,25).setValue(new Date().toISOString());return{ok:true}}
+function updateNote(id,n){var sh=getSS().getSheetByName('items'),r=findRow_(sh,id);if(r<0)return{error:'Not found'};sh.getRange(r,24).setValue(n);sh.getRange(r,25).setValue(new Date().toISOString());return{ok:true}}
+function updateNowTask(v){getSS().getSheetByName('settings').getRange(2,2).setValue(v);return{ok:true}}
+
+function initSheet(){
+  var ss=getSS(),sh=ss.getSheetByName('items');if(!sh)sh=ss.insertSheet('items');
+  if(sh.getLastRow()===0)sh.getRange(1,1,1,25).setValues([['id','chapter','section','name','priority','check_s1','check_s2','check_s3','check_s4','check_s5','check_s6','check_s7','check_s8','check_s9','link_s1','link_s2','link_s3','link_s4','link_s5','link_s6','link_s7','link_s8','link_s9','note','lastUpdated']]);
+  if(sh.getLastRow()<=1){var D=[['1-1-1','第1章','1-1','調剤報酬の全体像（調剤技術料＋薬学管理料＋薬剤料＋特定保険医療材料料＋その他）'],['1-1-2','第1章','1-1','基礎点数と加算点数'],['1-2-1','第1章','1-2','「調剤」「剤」について'],['1-2-2','第1章','1-2','処方せんの受付回数について'],['1-3-1','第1章','1-3','14日超・保存困難による分割調剤'],['1-3-2','第1章','1-3','後発医薬品の初回分割調剤'],['1-3-3','第1章','1-3','医師の分割指示に係る分割調剤'],['1-4-1','第1章','1-4','リフィル処方せんとは'],['1-4-2','第1章','1-4','算定の流れと留意点'],['1-4-3','第1章','1-4','服薬情報等提供料との関係'],['1-5-1','第1章','1-5','オンライン服薬指導の基本'],['1-5-2','第1章','1-5','対象となるケース'],['1-5-3','第1章','1-5','算定の流れと留意点'],['2-1','第2章','2-1','調剤技術料とは'],['2-2-1','第2章','2-2','調剤基本料①〜③'],['2-2-2','第2章','2-2','特別調剤基本料A・B'],['2-3-1','第2章','2-3','地域支援・医薬品供給対応体制加算①〜⑤'],['2-3-2','第2章','2-3','連携強化加算'],['2-3-3','第2章','2-3','バイオ後続品調剤体制加算'],['2-3-4','第2章','2-3','後発医薬品減算'],['2-3-5','第2章','2-3','在宅薬学総合体制加算①②'],['2-3-6','第2章','2-3','電子的調剤情報連携体制整備加算'],['2-3-7','第2章','2-3','門前薬局等立地依存減算'],['2-4-1','第2章','2-4','内服薬'],['2-4-2','第2章','2-4','屯服薬'],['2-4-3','第2章','2-4','浸煎薬・湯薬'],['2-4-4','第2章','2-4','注射薬'],['2-4-5','第2章','2-4','外用薬'],['2-5-1','第2章','2-5','麻薬等加算'],['2-5-2','第2章','2-5','無菌製剤処理加算'],['2-5-3','第2章','2-5','自家製剤加算'],['2-5-4','第2章','2-5','計量混合調剤加算'],['2-5-5','第2章','2-5','時間外等加算（時間外・休日・深夜）'],['2-5-6','第2章','2-5','夜間・休日等加算'],['3-1','第3章','3-1','薬学管理料とは'],['3-2','第3章','3-2','調剤管理料'],['3-3-1','第3章','3-3','調剤時残薬調整加算と薬学的有害事象等防止加算（イ〜ニ）'],['3-4-1','第3章','3-4','かかりつけ薬剤師とは'],['3-4-2','第3章','3-4','オンライン服薬指導との関係'],['3-5-1','第3章','3-5','特定薬剤管理指導加算①②③'],['3-5-2','第3章','3-5','麻薬管理指導加算'],['3-5-3','第3章','3-5','乳幼児服薬指導加算'],['3-5-4','第3章','3-5','小児特定加算'],['3-5-5','第3章','3-5','吸入薬指導加算'],['3-5-6','第3章','3-5','かかりつけ薬剤師フォローアップ加算'],['3-5-7','第3章','3-5','かかりつけ薬剤師訪問加算'],['3-6','第3章','3-6','外来服薬支援料①・②'],['3-7-1','第3章','3-7','施設連携加算'],['3-8','第3章','3-8','服用薬剤調整支援料'],['3-9','第3章','3-9〜','調剤後薬剤管理指導料'],['3-10','第3章','3-9〜','服薬情報等提供料'],['3-11','第3章','3-9〜','経管投薬支援料'],['3-12','第3章','3-9〜','在宅患者訪問薬剤管理指導料'],['3-13','第3章','3-9〜','在宅患者訪問薬剤管理指導等に係る加算'],['3-14','第3章','3-9〜','在宅患者緊急訪問薬剤管理指導料'],['3-15','第3章','3-9〜','在宅患者緊急時等共同指導料'],['3-16','第3章','3-9〜','退院時共同指導料'],['3-17','第3章','3-9〜','在宅移行初期管理料'],['3-18','第3章','3-9〜','訪問薬剤管理医師同時指導料'],['3-19','第3章','3-9〜','複数名薬剤管理指導訪問料'],['4-1-1','第4章','4-1','薬剤料の計算方法'],['4-1-2','第4章','4-1','多剤投与時の逓減措置'],['5-1','第5章','5-1','特定保険医療材料料'],['6-1','第6章','6-1〜','調剤ベースアップ評価料'],['6-2','第6章','6-1〜','調剤物価対応料'],['7-1','第7章','7-1〜','居宅療養管理指導費'],['7-2','第7章','7-1〜','介護予防居宅療養管理指導費'],['7-3','第7章','7-1〜','単一建物居住者の考え方（医療保険との違い）']];
+  var rows=D.map(function(d){var r=[d[0],d[1],d[2],d[3],'none'];for(var i=0;i<18;i++)r.push('');r.push('');r.push('');return r});
+  sh.getRange(2,1,rows.length,25).setValues(rows)}
+  var sh2=ss.getSheetByName('settings');if(!sh2){sh2=ss.insertSheet('settings');sh2.getRange(1,1,2,2).setValues([['key','value'],['now_task','']])}
+  sh.setFrozenRows(1);Logger.log('initSheet完了')
+}`;
+
+// Setup画面にCode.gsを表示
+document.getElementById('gas-code').textContent = GAS_CODE;
+
+function copyGasCode(){
+  var ta=document.createElement('textarea');ta.value=GAS_CODE;ta.style.cssText='position:fixed;left:-9999px';document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');var b=document.querySelector('.setup-copy');b.textContent='✓ コピー済み';b.classList.add('ok');setTimeout(function(){b.textContent='Code.gs をコピー';b.classList.remove('ok')},2000)}catch(e){}
+  document.body.removeChild(ta);
+}
+
+// ===================================================================
+//  GAS URL管理
+// ===================================================================
+var GAS_URL = localStorage.getItem('ov6_gas_url') || '';
+document.getElementById('setup-url').value = GAS_URL;
+
+// ===================================================================
+//  JSONP通信
+// ===================================================================
+var _jc=0;
+function jp(url){return new Promise(function(ok,ng){var cb='_cb'+(_jc++),s=document.createElement('script');window[cb]=function(d){delete window[cb];s.remove();ok(d)};s.onerror=function(){delete window[cb];s.remove();ng('error')};s.src=url+'&callback='+cb;document.head.appendChild(s)})}
+function gasGet(){return jp(GAS_URL+'?action=getAll')}
+function gasPost(body){return jp(GAS_URL+'?action=post&data='+encodeURIComponent(JSON.stringify(body)))}
+function send(body){if(!GAS_URL){svL();return}gasPost(body).then(function(r){if(r&&r.ok)showToast('保存OK','ok');else showToast('保存エラー','fail')}).catch(function(){showToast('通信エラー（ローカル保存済）','fail');svL()})}
+function showToast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast '+t+' show';setTimeout(function(){e.classList.remove('show')},2000)}
+
+// ===================================================================
+//  接続テスト & 画面切り替え
+// ===================================================================
+function connectGAS(){
+  var u=document.getElementById('setup-url').value.trim(),m=document.getElementById('setup-msg');
+  if(!u){m.style.color='var(--red)';m.textContent='URLを入力してください';return}
+  if(u.indexOf('script.google.com')<0){m.style.color='var(--red)';m.textContent='GASのURLではありません';return}
   m.style.color='var(--gold)';m.textContent='接続テスト中…';
-  setTimeout(()=>{document.getElementById('sp').classList.remove('open');checks={};links={};pris={};nts={};init()},400);
+  localStorage.setItem('ov6_gas_url',u);GAS_URL=u;
+  gasGet().then(function(d){
+    if(d&&d.items!==undefined){m.style.color='var(--green)';m.textContent='接続成功！ダッシュボードを表示します…';
+      setTimeout(function(){showDashboard(d)},500)}
+    else{m.style.color='var(--red)';m.textContent='データ形式が不正です。initSheetを実行済みか確認してください。'}
+  }).catch(function(){m.style.color='var(--red)';m.textContent='接続失敗。URLが正しいか、デプロイ設定（アクセス:全員）を確認してください。'});
+}
+
+function skipSetup(){
+  document.getElementById('conn').className='conn local';
+  document.getElementById('conn-text').textContent='ローカルモード（クリックで設定）';
+  checks=gL('c');lnk=gL('l');pris=gL('p');nts=gL('n');
+  var nv=localStorage.getItem('ov6_now');if(nv)document.getElementById('now-task').value=nv;
+  document.getElementById('setup').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  render();
+}
+
+function showDashboard(d){
+  checks={};lnk={};pris={};nts={};
+  if(d&&d.items)d.items.forEach(function(it){
+    if(it.checks&&Object.keys(it.checks).length)checks[it.id]=it.checks;
+    if(it.links&&Object.keys(it.links).length)lnk[it.id]=it.links;
+    if(it.priority&&it.priority!=='none')pris[it.id]=it.priority;
+    if(it.note)nts[it.id]=it.note;
+  });
+  if(d&&d.nowTask)document.getElementById('now-task').value=d.nowTask;
+  svL();
+  document.getElementById('conn').className='conn ok';
+  document.getElementById('conn-text').textContent='GAS接続OK ✓（クリックで設定）';
+  document.getElementById('setup').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  render();
+}
+
+function doReload(){
+  if(!GAS_URL){showToast('GAS未接続','fail');return}
+  gasGet().then(function(d){showDashboard(d);showToast('再読込完了','ok')}).catch(function(){showToast('再読込エラー','fail')});
 }
 
 // ===================================================================
-//  ヘルパー
+//  ローカルストレージ
+// ===================================================================
+var checks={},lnk={},pris={},nts={},curF='all',searchQ='';
+function gL(k){try{return JSON.parse(localStorage.getItem('ov6_'+k)||'{}')}catch(e){return{}}}
+function svL(){try{localStorage.setItem('ov6_c',JSON.stringify(checks));localStorage.setItem('ov6_l',JSON.stringify(lnk));localStorage.setItem('ov6_p',JSON.stringify(pris));localStorage.setItem('ov6_n',JSON.stringify(nts))}catch(e){}}
+
+// ===================================================================
+//  データ定義
+// ===================================================================
+var DATA=[{ch:'第1章',title:'調剤報酬の基本',sections:[{sec:'1-1',title:'調剤報酬の基本',items:[{id:'1-1-1',name:'調剤報酬の全体像（調剤技術料＋薬学管理料＋薬剤料＋特定保険医療材料料＋その他）'},{id:'1-1-2',name:'基礎点数と加算点数'}]},{sec:'1-2',title:'調剤報酬の算定単位',items:[{id:'1-2-1',name:'「調剤」「剤」について'},{id:'1-2-2',name:'処方せんの受付回数について'}]},{sec:'1-3',title:'分割調剤',items:[{id:'1-3-1',name:'14日超・保存困難による分割調剤'},{id:'1-3-2',name:'後発医薬品の初回分割調剤'},{id:'1-3-3',name:'医師の分割指示に係る分割調剤'}]},{sec:'1-4',title:'リフィル処方せん',items:[{id:'1-4-1',name:'リフィル処方せんとは'},{id:'1-4-2',name:'算定の流れと留意点'},{id:'1-4-3',name:'服薬情報等提供料との関係'}]},{sec:'1-5',title:'オンライン服薬指導',items:[{id:'1-5-1',name:'オンライン服薬指導の基本'},{id:'1-5-2',name:'対象となるケース'},{id:'1-5-3',name:'算定の流れと留意点'}]}]},{ch:'第2章',title:'調剤技術料',sections:[{sec:'2-1',title:'調剤技術料とは',items:[{id:'2-1',name:'調剤技術料とは'}]},{sec:'2-2',title:'調剤基本料',items:[{id:'2-2-1',name:'調剤基本料①〜③'},{id:'2-2-2',name:'特別調剤基本料A・B'}]},{sec:'2-3',title:'調剤基本料に係る加算・減算',items:[{id:'2-3-1',name:'地域支援・医薬品供給対応体制加算①〜⑤'},{id:'2-3-2',name:'連携強化加算'},{id:'2-3-3',name:'バイオ後続品調剤体制加算'},{id:'2-3-4',name:'後発医薬品減算'},{id:'2-3-5',name:'在宅薬学総合体制加算①②'},{id:'2-3-6',name:'電子的調剤情報連携体制整備加算'},{id:'2-3-7',name:'門前薬局等立地依存減算'}]},{sec:'2-4',title:'薬剤調製料',items:[{id:'2-4-1',name:'内服薬'},{id:'2-4-2',name:'屯服薬'},{id:'2-4-3',name:'浸煎薬・湯薬'},{id:'2-4-4',name:'注射薬'},{id:'2-4-5',name:'外用薬'}]},{sec:'2-5',title:'薬剤調製料に係る加算',items:[{id:'2-5-1',name:'麻薬等加算'},{id:'2-5-2',name:'無菌製剤処理加算'},{id:'2-5-3',name:'自家製剤加算'},{id:'2-5-4',name:'計量混合調剤加算'},{id:'2-5-5',name:'時間外等加算（時間外・休日・深夜）'},{id:'2-5-6',name:'夜間・休日等加算'}]}]},{ch:'第3章',title:'薬学管理料',sections:[{sec:'3-1',title:'薬学管理料とは',items:[{id:'3-1',name:'薬学管理料とは'}]},{sec:'3-2',title:'調剤管理料',items:[{id:'3-2',name:'調剤管理料'}]},{sec:'3-3',title:'調剤管理料に係る加算',items:[{id:'3-3-1',name:'調剤時残薬調整加算と薬学的有害事象等防止加算（イ〜ニ）'}]},{sec:'3-4',title:'服薬管理指導料',items:[{id:'3-4-1',name:'かかりつけ薬剤師とは'},{id:'3-4-2',name:'オンライン服薬指導との関係'}]},{sec:'3-5',title:'服薬管理指導料に係る加算',items:[{id:'3-5-1',name:'特定薬剤管理指導加算①②③'},{id:'3-5-2',name:'麻薬管理指導加算'},{id:'3-5-3',name:'乳幼児服薬指導加算'},{id:'3-5-4',name:'小児特定加算'},{id:'3-5-5',name:'吸入薬指導加算'},{id:'3-5-6',name:'かかりつけ薬剤師フォローアップ加算'},{id:'3-5-7',name:'かかりつけ薬剤師訪問加算'}]},{sec:'3-6',title:'外来服薬支援料',items:[{id:'3-6',name:'外来服薬支援料①・②'}]},{sec:'3-7',title:'外来服薬支援料に係る加算',items:[{id:'3-7-1',name:'施設連携加算'}]},{sec:'3-8',title:'服用薬剤調整支援料',items:[{id:'3-8',name:'服用薬剤調整支援料'}]},{sec:'3-9〜',title:'その他薬学管理料',items:[{id:'3-9',name:'調剤後薬剤管理指導料'},{id:'3-10',name:'服薬情報等提供料'},{id:'3-11',name:'経管投薬支援料'},{id:'3-12',name:'在宅患者訪問薬剤管理指導料'},{id:'3-13',name:'在宅患者訪問薬剤管理指導等に係る加算'},{id:'3-14',name:'在宅患者緊急訪問薬剤管理指導料'},{id:'3-15',name:'在宅患者緊急時等共同指導料'},{id:'3-16',name:'退院時共同指導料'},{id:'3-17',name:'在宅移行初期管理料'},{id:'3-18',name:'訪問薬剤管理医師同時指導料'},{id:'3-19',name:'複数名薬剤管理指導訪問料'}]}]},{ch:'第4章',title:'薬剤料',sections:[{sec:'4-1',title:'薬剤料',items:[{id:'4-1-1',name:'薬剤料の計算方法'},{id:'4-1-2',name:'多剤投与時の逓減措置'}]}]},{ch:'第5章',title:'特定保険医療材料料',sections:[{sec:'5-1',title:'特定保険医療材料料',items:[{id:'5-1',name:'特定保険医療材料料'}]}]},{ch:'第6章',title:'その他',sections:[{sec:'6-1〜',title:'その他',items:[{id:'6-1',name:'調剤ベースアップ評価料'},{id:'6-2',name:'調剤物価対応料'}]}]},{ch:'第7章',title:'介護報酬',sections:[{sec:'7-1〜',title:'介護報酬',items:[{id:'7-1',name:'居宅療養管理指導費'},{id:'7-2',name:'介護予防居宅療養管理指導費'},{id:'7-3',name:'単一建物居住者の考え方（医療保険との違い）'}]}]}];
+var WF=[{key:'s1',label:'デザイン作成',tag:'DESIGN',tc:'tg-d',sub:'Claude STARTLINE',deps:[],prompt:'「{ITEM}」を4つの公式資料から網羅的に抜粋しデザイン作成。\n手順：startline-writer → html-converter → checker\n資料外の情報は補完しない'},{key:'s2',label:'ファクトチェック①',tag:'CHECK',tc:'tg-c',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」のデザインHTMLを文字起こし→4資料と照合\n✅正確 ⚠️要修正 ❌誤り で報告'},{key:'s3',label:'競合調査',tag:'RESEARCH',tc:'tg-r',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」の競合調査。差分リスト＋追加推奨を優先度付きで出力'},{key:'s4',label:'デザイン修正→完成',tag:'DESIGN',tc:'tg-d',sub:'差分反映',deps:['s2','s3'],prompt:'「{ITEM}」のFC＋競合差分を反映し最終版に修正'},{key:'s5',label:'目次追記',tag:'FINAL',tc:'tg-f',sub:'ステータス更新',deps:['s4'],prompt:'目次に「{ITEM}」のステータスを追記'},{key:'s6',label:'最終FC',tag:'CHECK',tc:'tg-c',sub:'完全照合',deps:['s4'],prompt:'「{ITEM}」最終版の完全ファクトチェック'},{key:'s7',label:'YouTube台本',tag:'YT',tc:'tg-y',sub:'youtube-script-writer',deps:['s3'],prompt:'「{ITEM}」のYouTube台本作成。誇張/煽りなし'},{key:'s8',label:'スライド',tag:'SLIDE',tc:'tg-s',sub:'slide-design-pro',deps:['s3'],prompt:'「{ITEM}」のスライド作成。全情報網羅'},{key:'s9',label:'note記事',tag:'NOTE',tc:'tg-n',sub:'note-article',deps:['s3'],prompt:'「{ITEM}」のnote記事作成。AI臭なし'}];
+var PC=['none','high','mid','low'],PL={none:'—',high:'高',mid:'中',low:'低'};
+
+// ===================================================================
+//  レンダリング & アクション
 // ===================================================================
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function fmtD(ts){const d=new Date(ts);return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
-function isLk(id,w){return w.deps.some(d=>!(checks[id]||{})[d])}
-function lkMsg(id,w){return '前提：'+w.deps.filter(d=>!(checks[id]||{})[d]).map(d=>(WF.find(x=>x.key===d)||{}).label||d).join('、')+'を先に完了'}
-const PC=['none','high','mid','low'],PL={none:'—',high:'高',mid:'中',low:'低'};
+function fmtD(ts){var d=new Date(ts);return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function isLk(id,w){return w.deps.some(function(d){return !(checks[id]||{})[d]})}
+function lkMsg(id,w){return '前提：'+w.deps.filter(function(d){return !(checks[id]||{})[d]}).map(function(d){var f=WF.find(function(x){return x.key===d});return f?f.label:d}).join('、')+'を先に完了'}
 
-// ===================================================================
-//  レンダリング
-// ===================================================================
-function render(){
-  let h='';
-  DATA.forEach((ch,ci)=>{
-    h+='<div class="ch" id="ch'+ci+'"><div class="ch-h" onclick="document.getElementById(\'ch'+ci+'\').classList.toggle(\'clp\')"><div class="ch-badge">'+ch.ch+'</div><div class="ch-t">'+ch.title+'</div><div class="ch-p" id="chp'+ci+'"></div><div class="ch-tog">▼</div></div><div class="ch-bd">';
-    ch.sections.forEach(s=>{
-      h+='<div class="sg"><div class="sg-lb">'+s.sec+'　'+s.title+'</div>';
-      s.items.forEach(it=>{
-        const id=it.id,ic=checks[id]||{},dc=WF.filter(w=>ic[w.key]).length,ad=dc===WF.length,st=dc===0?'todo':ad?'done':'wip',pr=pris[id]||'none';
-        let lt=0;Object.values(ic).forEach(v=>{if(typeof v==='number'&&v>lt)lt=v});
-        let vi=true;
-        if(curF==='todo'&&st!=='todo')vi=false;if(curF==='wip'&&st!=='wip')vi=false;if(curF==='done'&&st!=='done')vi=false;
-        if(curF==='high'&&pr!=='high')vi=false;if(curF==='mid'&&pr!=='mid')vi=false;if(curF==='low'&&pr!=='low')vi=false;
-        if(searchQ&&!it.name.includes(searchQ)&&!id.includes(searchQ))vi=false;
-        h+='<div class="it '+(ad?'ad':'')+' '+(vi?'':'hidden')+'" data-id="'+id+'" data-st="'+st+'" data-pri="'+pr+'"><div class="it-h" onclick="this.parentElement.classList.toggle(\'op\')"><div class="it-id">'+id+'</div><div class="it-pri pri-'+pr+'" onclick="event.stopPropagation();cyP(\''+id+'\')">'+PL[pr]+'</div><div class="it-nm">'+it.name+'</div>';
-        if(lt)h+='<div class="it-date">'+fmtD(lt)+'</div>';
-        h+='<div class="wd">';WF.forEach(w=>{const dn=ic[w.key],lk=!dn&&isLk(id,w);h+='<div class="wd-d '+(dn?'dn':'')+' '+(lk?'lk':'')+'"></div>'});
-        h+='</div><div class="it-ch">▶</div></div><div class="it-dt"><div class="dt-in">';
-        WF.forEach(w=>{
-          const dn=ic[w.key],lk=!dn&&isLk(id,w),ts=dn&&typeof ic[w.key]==='number'?ic[w.key]:null;
-          const pm=w.prompt.replace(/\{ITEM\}/g,it.name),ln=(links[id]||{})[w.key]||'';
-          h+='<div class="wf">';
-          h+=lk?'<div class="wf-ck lk"></div>':'<div class="wf-ck '+(dn?'on':'')+'" onclick="event.stopPropagation();togW(\''+id+"','"+w.key+"')\"></div>";
-          h+='<div class="wf-i"><div class="wf-tl">'+w.label+' <span class="tg '+w.tc+'">'+w.tag+'</span></div><div class="wf-sb">'+w.sub+'</div>';
-          if(ts)h+='<div class="wf-ts">✓ '+fmtD(ts)+'</div>';
-          if(lk)h+='<div class="wf-lk-msg">'+lkMsg(id,w)+'</div>';
-          h+='<div class="wf-link-row"><input class="wf-link-in" placeholder="成果物URL…" value="'+esc(ln)+'" onchange="svLn(\''+id+"','"+w.key+'\',this.value)" onclick="event.stopPropagation()">';
-          if(ln)h+='<a class="wf-link-go" href="'+esc(ln)+'" target="_blank" onclick="event.stopPropagation()">Open</a>';
-          h+='</div><div class="wf-pm" id="pm-'+id+'-'+w.key+'"><div class="wf-pi"><button class="wf-cp" onclick="event.stopPropagation();cpB(this)">COPY</button>'+esc(pm)+'</div></div></div>';
-          h+='<button class="wf-pb" onclick="event.stopPropagation();document.getElementById(\'pm-'+id+'-'+w.key+"').classList.toggle('op')\">Prompt</button></div>";
-        });
-        h+='<div class="it-nw"><div class="it-nl">MEMO</div><textarea class="it-nt" placeholder="メモ…" onchange="svNt(\''+id+'\',this.value)" onclick="event.stopPropagation()">'+esc(nts[id]||'')+'</textarea></div>';
-        h+='</div></div></div>';
-      });h+='</div>';
-    });h+='</div></div>';
-  });
-  document.getElementById('mn').innerHTML=h;updS();
-}
+function render(){var h='';DATA.forEach(function(ch,ci){h+='<div class="ch" id="ch'+ci+'"><div class="ch-h" onclick="document.getElementById(\'ch'+ci+'\').classList.toggle(\'clp\')"><div class="ch-badge">'+ch.ch+'</div><div class="ch-t">'+ch.title+'</div><div class="ch-p" id="chp'+ci+'"></div><div class="ch-tog">▼</div></div><div class="ch-bd">';ch.sections.forEach(function(s){h+='<div class="sg"><div class="sg-lb">'+s.sec+'　'+s.title+'</div>';s.items.forEach(function(it){var id=it.id,ic=checks[id]||{},dc=WF.filter(function(w){return ic[w.key]}).length,ad=dc===WF.length,st=dc===0?'todo':ad?'done':'wip',pr=pris[id]||'none';var lt=0;Object.values(ic).forEach(function(v){if(typeof v==='number'&&v>lt)lt=v});var vi=true;if(curF==='todo'&&st!=='todo')vi=false;if(curF==='wip'&&st!=='wip')vi=false;if(curF==='done'&&st!=='done')vi=false;if(curF==='high'&&pr!=='high')vi=false;if(curF==='mid'&&pr!=='mid')vi=false;if(curF==='low'&&pr!=='low')vi=false;if(searchQ&&it.name.indexOf(searchQ)<0&&id.indexOf(searchQ)<0)vi=false;h+='<div class="it '+(ad?'ad':'')+' '+(vi?'':'hidden')+'" data-id="'+id+'" data-st="'+st+'" data-pri="'+pr+'"><div class="it-h" onclick="this.parentElement.classList.toggle(\'op\')"><div class="it-id">'+id+'</div><div class="it-pri pri-'+pr+'" onclick="event.stopPropagation();cyP(\''+id+'\')">'+PL[pr]+'</div><div class="it-nm">'+it.name+'</div>';if(lt)h+='<div class="it-date">'+fmtD(lt)+'</div>';h+='<div class="wd">';WF.forEach(function(w){var dn=ic[w.key],lk2=!dn&&isLk(id,w);h+='<div class="wd-d '+(dn?'dn':'')+' '+(lk2?'lk':'')+'"></div>'});h+='</div><div class="it-ch">▶</div></div><div class="it-dt"><div class="dt-in">';WF.forEach(function(w){var dn=ic[w.key],lk2=!dn&&isLk(id,w),ts=dn&&typeof ic[w.key]==='number'?ic[w.key]:null;var pm=w.prompt.replace(/\{ITEM\}/g,it.name),ln=(lnk[id]||{})[w.key]||'';h+='<div class="wf">';h+=lk2?'<div class="wf-ck lk"></div>':'<div class="wf-ck '+(dn?'on':'')+'" onclick="event.stopPropagation();togW(\''+id+"','"+w.key+"')\"></div>";h+='<div class="wf-i"><div class="wf-tl">'+w.label+' <span class="tg '+w.tc+'">'+w.tag+'</span></div><div class="wf-sb">'+w.sub+'</div>';if(ts)h+='<div class="wf-ts">✓ '+fmtD(ts)+'</div>';if(lk2)h+='<div class="wf-lk-msg">'+lkMsg(id,w)+'</div>';h+='<div class="wf-link-row"><input class="wf-link-in" placeholder="成果物URL…" value="'+esc(ln)+'" onchange="svLn(\''+id+"','"+w.key+'\',this.value)" onclick="event.stopPropagation()">';if(ln)h+='<a class="wf-link-go" href="'+esc(ln)+'" target="_blank" onclick="event.stopPropagation()">Open</a>';h+='</div><div class="wf-pm" id="pm-'+id+'-'+w.key+'"><div class="wf-pi"><button class="wf-cp" onclick="event.stopPropagation();cpB(this)">COPY</button>'+esc(pm)+'</div></div></div>';h+='<button class="wf-pb" onclick="event.stopPropagation();document.getElementById(\'pm-'+id+'-'+w.key+"').classList.toggle('op')\">Prompt</button></div>"});h+='<div class="it-nw"><div class="it-nl">MEMO</div><textarea class="it-nt" placeholder="メモ…" onchange="svNt(\''+id+'\',this.value)" onclick="event.stopPropagation()">'+esc(nts[id]||'')+'</textarea></div>';h+='</div></div></div>'});h+='</div>'});h+='</div></div>'});document.getElementById('mn').innerHTML=h;updS()}
 
-// ===================================================================
-//  アクション
-// ===================================================================
-function togW(id,k){
-  if(!checks[id])checks[id]={};
-  if(checks[id][k]){delete checks[id][k];WF.forEach(w=>{if(w.deps.includes(k)&&checks[id][w.key])delete checks[id][w.key]});send({action:'updateCheck',itemId:id,stepKey:k,checked:false,timestamp:0});WF.forEach(w=>{if(w.deps.includes(k))send({action:'updateCheck',itemId:id,stepKey:w.key,checked:false,timestamp:0})})}
-  else{const t=Date.now();checks[id][k]=t;send({action:'updateCheck',itemId:id,stepKey:k,checked:true,timestamp:t})}
-  svL();render();
-}
-function cyP(id){const c=pris[id]||'none',n=PC[(PC.indexOf(c)+1)%PC.length];pris[id]=n;send({action:'updatePriority',itemId:id,priority:n});svL();const b=document.querySelector('.it[data-id="'+id+'"] .it-pri');if(b){b.className='it-pri pri-'+n;b.textContent=PL[n]}}
-function svLn(id,k,v){if(!links[id])links[id]={};links[id][k]=v;send({action:'updateLink',itemId:id,stepKey:k,url:v});svL()}
+function togW(id,k){if(!checks[id])checks[id]={};if(checks[id][k]){delete checks[id][k];send({action:'updateCheck',itemId:id,stepKey:k,checked:false,timestamp:0});WF.forEach(function(w){if(w.deps.indexOf(k)>=0&&checks[id][w.key]){delete checks[id][w.key];send({action:'updateCheck',itemId:id,stepKey:w.key,checked:false,timestamp:0})}})}else{var t=Date.now();checks[id][k]=t;send({action:'updateCheck',itemId:id,stepKey:k,checked:true,timestamp:t})}svL();render()}
+function cyP(id){var c=pris[id]||'none',n=PC[(PC.indexOf(c)+1)%PC.length];pris[id]=n;send({action:'updatePriority',itemId:id,priority:n});svL();var b=document.querySelector('.it[data-id="'+id+'"] .it-pri');if(b){b.className='it-pri pri-'+n;b.textContent=PL[n]}}
+function svLn(id,k,v){if(!lnk[id])lnk[id]={};lnk[id][k]=v;send({action:'updateLink',itemId:id,stepKey:k,url:v});svL()}
 function svNt(id,v){nts[id]=v;send({action:'updateNote',itemId:id,note:v});svL()}
-let _nt;function debounceNow(){clearTimeout(_nt);_nt=setTimeout(()=>{const v=document.getElementById('now-task').value;send({action:'updateNow',value:v});try{localStorage.setItem(L.w,v)}catch(e){}},1000)}
+var _nt;function debounceNow(){clearTimeout(_nt);_nt=setTimeout(function(){var v=document.getElementById('now-task').value;send({action:'updateNow',value:v});try{localStorage.setItem('ov6_now',v)}catch(e){}},1000)}
+function setF(f,b){curF=f;document.querySelectorAll('.fb-b').forEach(function(x){x.classList.remove('on')});b.classList.add('on');applyVis()}
+function applyVis(){document.querySelectorAll('.it').forEach(function(e){var s=e.dataset.st,p=e.dataset.pri,nm=e.querySelector('.it-nm').textContent,id=e.dataset.id;var v=1;if(curF==='todo'&&s!=='todo')v=0;if(curF==='wip'&&s!=='wip')v=0;if(curF==='done'&&s!=='done')v=0;if(curF==='high'&&p!=='high')v=0;if(curF==='mid'&&p!=='mid')v=0;if(curF==='low'&&p!=='low')v=0;if(searchQ&&nm.indexOf(searchQ)<0&&id.indexOf(searchQ)<0)v=0;e.classList.toggle('hidden',!v)})}
+function updS(){var tot=0,dn=0,wp=0,td=0,tc=0,dc=0;DATA.forEach(function(ch,ci){var ct=0,cd=0;ch.sections.forEach(function(s){s.items.forEach(function(it){tot++;ct++;var ic=checks[it.id]||{},d=WF.filter(function(w){return ic[w.key]}).length;tc+=WF.length;dc+=d;if(!d)td++;else if(d===WF.length){dn++;cd++}else wp++})});var e=document.getElementById('chp'+ci);if(e)e.textContent=cd+'/'+ct});document.getElementById('s-tot').textContent=tot;document.getElementById('s-dn').textContent=dn;document.getElementById('s-wp').textContent=wp;document.getElementById('s-td').textContent=td;var p=tc?Math.round(dc/tc*100):0;document.getElementById('gp-fl').style.width=p+'%';document.getElementById('gp-lb').textContent=p+'%'}
+function cpB(b){var bl=b.parentElement,cl=bl.cloneNode(true);cl.querySelectorAll('.wf-cp').forEach(function(x){x.remove()});var tx=cl.textContent.trim();var ta=document.createElement('textarea');ta.value=tx;ta.style.cssText='position:fixed;left:-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='✓';b.classList.add('ok');setTimeout(function(){b.textContent='COPY';b.classList.remove('ok')},1500)}catch(e){}document.body.removeChild(ta)}
+function exportJSON(){var d={checks:checks,links:lnk,pris:pris,nts:nts,now:document.getElementById('now-task').value,at:new Date().toISOString()};var b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='orchestra_'+new Date().toISOString().slice(0,10)+'.json';a.click()}
 
 // ===================================================================
-//  フィルタ・統計・コピー・エクスポート
+//  起動: URL保存済みなら自動接続、なければセットアップ画面
 // ===================================================================
-function setF(f,b){curF=f;document.querySelectorAll('.fb-b').forEach(x=>x.classList.remove('on'));b.classList.add('on');applyVis()}
-function applyVis(){document.querySelectorAll('.it').forEach(e=>{const s=e.dataset.st,p=e.dataset.pri,nm=e.querySelector('.it-nm').textContent,id=e.dataset.id;let v=1;if(curF==='todo'&&s!=='todo')v=0;if(curF==='wip'&&s!=='wip')v=0;if(curF==='done'&&s!=='done')v=0;if(curF==='high'&&p!=='high')v=0;if(curF==='mid'&&p!=='mid')v=0;if(curF==='low'&&p!=='low')v=0;if(searchQ&&!nm.includes(searchQ)&&!id.includes(searchQ))v=0;e.classList.toggle('hidden',!v)})}
-function updS(){let tot=0,dn=0,wp=0,td=0,tc=0,dc=0;DATA.forEach((ch,ci)=>{let ct=0,cd=0;ch.sections.forEach(s=>s.items.forEach(it=>{tot++;ct++;const ic=checks[it.id]||{},d=WF.filter(w=>ic[w.key]).length;tc+=WF.length;dc+=d;if(!d)td++;else if(d===WF.length){dn++;cd++}else wp++}));const e=document.getElementById('chp'+ci);if(e)e.textContent=cd+'/'+ct});document.getElementById('s-tot').textContent=tot;document.getElementById('s-dn').textContent=dn;document.getElementById('s-wp').textContent=wp;document.getElementById('s-td').textContent=td;const p=tc?Math.round(dc/tc*100):0;document.getElementById('gp-fl').style.width=p+'%';document.getElementById('gp-lb').textContent=p+'%'}
-function cpB(b){const bl=b.parentElement,cl=bl.cloneNode(true);cl.querySelectorAll('.wf-cp').forEach(x=>x.remove());const tx=cl.textContent.trim();const ta=document.createElement('textarea');ta.value=tx;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;opacity:0';document.body.appendChild(ta);ta.select();let ok=0;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);if(ok){b.textContent='✓';b.classList.add('ok');setTimeout(()=>{b.textContent='COPY';b.classList.remove('ok')},1500)}else if(navigator.clipboard){navigator.clipboard.writeText(tx).then(()=>{b.textContent='✓';b.classList.add('ok');setTimeout(()=>{b.textContent='COPY';b.classList.remove('ok')},1500)}).catch(()=>{b.textContent='選択済→Ctrl+C';setTimeout(()=>{b.textContent='COPY'},3000)})}}
-function exportJSON(){const d={checks,links,pris,nts,now:document.getElementById('now-task').value,at:new Date().toISOString()};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='orchestra_'+new Date().toISOString().slice(0,10)+'.json';a.click()}
-
-// ===================================================================
-//  起動
-// ===================================================================
-document.getElementById('gas-input').value=GAS_URL;
-if(!GAS_URL)document.getElementById('sp').classList.add('open');
-init();
+if(GAS_URL){
+  gasGet().then(function(d){
+    if(d&&d.items!==undefined)showDashboard(d);
+    else{document.getElementById('setup-msg').textContent='自動接続失敗。URLを確認してください。'}
+  }).catch(function(){
+    // GAS接続失敗 → ローカルモードでダッシュボード表示
+    skipSetup();
+  });
+}
 </script>
 </body>
 </html>
