@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンテンツオーケストラ — 制作管理</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎼</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Cormorant+Garamond:ital,wght@0,600;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06060b;--bg2:#0c0c14;--s:#111119;--s2:#17171f;--bd:#222233;--bd2:#2e2e44;--t:#dddde8;--t2:#9999ae;--t3:#5e5e72;--w:#f0f0f8;--gold:#c9a84c;--gold-d:rgba(201,168,76,.12);--blue:#5a7aff;--cyan:#00c8dd;--green:#10b981;--green-d:rgba(16,185,129,.12);--red:#ef4444;--orange:#f59e0b;--purple:#a855f7;--pink:#ec4899;--r:10px}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--t);line-height:1.65;min-height:100vh}
+.hd{padding:48px 24px 36px;text-align:center;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,rgba(201,168,76,.03),transparent)}.hd-ey{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}.hd h1{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,48px);font-weight:600;color:var(--w);letter-spacing:-.5px;margin-bottom:6px}.hd h1 em{font-style:italic;color:var(--gold)}.hd-sub{font-size:13px;color:var(--t2);max-width:540px;margin:0 auto}
+.conn{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;border:1px solid var(--bd)}.conn-dot{width:7px;height:7px;border-radius:50%}.conn.loading .conn-dot{background:var(--orange);animation:bk 1s infinite}.conn.ok .conn-dot{background:var(--green)}.conn.ok{border-color:rgba(16,185,129,.3);color:var(--green)}.conn.err .conn-dot{background:var(--red)}.conn.err{border-color:rgba(239,68,68,.3);color:var(--red)}.conn.local .conn-dot{background:var(--orange)}.conn.local{border-color:rgba(245,158,11,.3);color:var(--orange)}
+.stog{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 16px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s;margin-top:8px}.stog:hover{border-color:var(--gold);color:var(--gold)}
+.sp{max-height:0;overflow:hidden;transition:max-height .3s;max-width:600px;margin:0 auto}.sp.open{max-height:300px;margin-top:14px}.sp-in{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px}.sp-lb{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);letter-spacing:1px;margin-bottom:6px}.sp-row{display:flex;gap:8px;align-items:center}.sp-input{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t);outline:none}.sp-input:focus{border-color:var(--gold)}.sp-input::placeholder{color:var(--t3)}.sp-save{font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 20px;border-radius:6px;border:none;background:var(--gold);color:var(--bg);cursor:pointer;font-weight:500}.sp-msg{font-size:11px;margin-top:8px;font-family:'JetBrains Mono',monospace}
+.toast{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:8px;font-size:11px;font-family:'JetBrains Mono',monospace;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}.toast.ok{background:var(--green);color:#fff}.toast.fail{background:var(--red);color:#fff}
+.now{max-width:600px;margin:24px auto 0}.now-lb{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:8px}.now-lb::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);animation:bk 1.6s ease-in-out infinite}@keyframes bk{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(201,168,76,.5)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(201,168,76,0)}}.now-in{width:100%;background:var(--s);border:2px solid var(--bd2);border-radius:var(--r);padding:13px 16px;font-family:'Noto Sans JP',sans-serif;font-size:20px;font-weight:700;color:var(--w);text-align:center;outline:none;transition:border-color .3s,box-shadow .3s}.now-in::placeholder{color:var(--t3);font-weight:400;font-size:15px}.now-in:focus{border-color:var(--gold);box-shadow:0 0 0 4px var(--gold-d)}
+.gp{max-width:600px;margin:18px auto 0;display:flex;align-items:center;gap:12px}.gp-tr{flex:1;height:5px;border-radius:3px;background:var(--bd);overflow:hidden}.gp-fl{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .5s}.gp-lb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2);white-space:nowrap}
+.sts{display:flex;justify-content:center;gap:28px;margin-top:18px;flex-wrap:wrap}.st{text-align:center}.st-n{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500}.st-l{font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase}
+.ex-bar{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}.ex-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 16px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s}.ex-btn:hover{border-color:var(--gold);color:var(--gold)}
+.fb{position:sticky;top:0;z-index:100;background:rgba(6,6,11,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.fb-b{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 12px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;transition:all .2s}.fb-b:hover{border-color:var(--gold);color:var(--gold)}.fb-b.on{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}.fb-s{margin-left:auto;background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--t);outline:none;width:160px;font-family:'Noto Sans JP',sans-serif}.fb-s:focus{border-color:var(--gold)}
+.mn{max-width:1000px;margin:0 auto;padding:20px 16px 100px}.ch{margin-bottom:32px}.ch-h{display:flex;align-items:center;gap:12px;padding:14px 0 8px;border-bottom:1px solid var(--bd);margin-bottom:10px;cursor:pointer;user-select:none}.ch-badge{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:600;color:var(--gold);border:1px solid rgba(201,168,76,.3);border-radius:6px;padding:2px 9px;flex-shrink:0}.ch-t{font-size:15px;font-weight:700;color:var(--w);flex:1}.ch-p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3)}.ch-tog{font-size:10px;color:var(--t3);transition:transform .2s}.ch.clp .ch-tog{transform:rotate(-90deg)}.ch.clp .ch-bd{display:none}.sg{margin-left:10px;padding-left:12px;border-left:2px solid var(--bd);margin-bottom:14px}.sg-lb{font-size:12px;font-weight:600;color:var(--t2);padding:6px 0 4px}
+.it{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:5px;overflow:hidden;transition:border-color .2s,opacity .3s}.it:hover{border-color:var(--bd2)}.it.ad{opacity:.4}.it-h{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;min-height:44px}.it-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);width:46px;flex-shrink:0}.it-pri{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;flex-shrink:0;cursor:pointer;transition:all .2s;border:1px solid transparent;user-select:none}.pri-high{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.3)}.pri-mid{background:rgba(245,158,11,.12);color:var(--orange);border-color:rgba(245,158,11,.3)}.pri-low{background:rgba(100,100,140,.1);color:var(--t3);border-color:rgba(100,100,140,.2)}.pri-none{background:transparent;color:var(--t3);border:1px dashed var(--bd)}.it-nm{flex:1;font-size:13px;font-weight:500;color:var(--w);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.it.ad .it-nm{text-decoration:line-through;text-decoration-color:var(--t3)}.it-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);flex-shrink:0}.wd{display:flex;gap:2px;flex-shrink:0}.wd-d{width:7px;height:7px;border-radius:2px;background:var(--bd);transition:background .2s}.wd-d.dn{background:var(--green)}.wd-d.lk{opacity:.4}.it-ch{font-size:9px;color:var(--t3);transition:transform .2s;flex-shrink:0}.it.op .it-ch{transform:rotate(90deg)}.it-dt{max-height:0;overflow:hidden;transition:max-height .4s ease}.it.op .it-dt{max-height:8000px}.dt-in{padding:12px 14px 14px;border-top:1px solid var(--bd)}
+.wf{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.03)}.wf:last-child{border-bottom:none}.wf-ck{width:20px;height:20px;border-radius:5px;border:2px solid var(--bd2);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}.wf-ck:hover{border-color:var(--green);background:var(--green-d)}.wf-ck.on{border-color:var(--green);background:var(--green)}.wf-ck.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700}.wf-ck.lk{border-color:var(--bd);background:rgba(40,40,55,.5);cursor:not-allowed;opacity:.4}.wf-ck.lk:hover{border-color:var(--bd);background:rgba(40,40,55,.5)}.wf-ck.lk::after{content:'🔒';font-size:9px}.wf-i{flex:1;min-width:0}.wf-tl{font-size:12px;font-weight:600;color:var(--t);display:flex;align-items:center;gap:7px;flex-wrap:wrap}.wf-tl .tg{font-family:'JetBrains Mono',monospace;font-size:8px;padding:1px 6px;border-radius:3px;letter-spacing:.5px}.tg-d{background:rgba(245,158,11,.15);color:var(--orange)}.tg-c{background:rgba(16,185,129,.15);color:var(--green)}.tg-r{background:rgba(99,102,241,.15);color:var(--blue)}.tg-y{background:rgba(239,68,68,.15);color:var(--red)}.tg-s{background:rgba(90,122,255,.15);color:var(--blue)}.tg-n{background:rgba(168,85,247,.15);color:var(--purple)}.tg-f{background:rgba(0,200,221,.15);color:var(--cyan)}.wf-sb{font-size:10px;color:var(--t3);margin-top:1px}.wf-ts{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);margin-top:2px}.wf-lk-msg{font-size:10px;color:var(--t3);font-style:italic;margin-top:2px}.wf-link-row{display:flex;gap:6px;margin-top:4px;align-items:center}.wf-link-in{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:3px 8px;font-size:10px;color:var(--t);font-family:'JetBrains Mono',monospace;outline:none}.wf-link-in:focus{border-color:var(--gold)}.wf-link-in::placeholder{color:var(--t3)}.wf-link-go{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;text-decoration:none}.wf-link-go:hover{border-color:var(--cyan);color:var(--cyan)}
+.wf-pb{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;transition:all .2s;flex-shrink:0;margin-top:1px}.wf-pb:hover{border-color:var(--gold);color:var(--gold)}.wf-pm{max-height:0;overflow:hidden;transition:max-height .3s,margin .3s}.wf-pm.op{max-height:2000px;margin-top:6px}.wf-pi{background:var(--s);border:1px solid var(--bd);border-radius:7px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:#b8b8cc;white-space:pre-wrap;word-break:break-all;position:relative}.wf-cp{position:absolute;top:6px;right:6px;font-size:9px;padding:2px 8px;border-radius:4px;border:1px solid var(--bd);background:var(--bg2);color:var(--t3);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s}.wf-cp:hover{border-color:var(--gold);color:var(--gold)}.wf-cp.ok{border-color:var(--green);color:var(--green)}
+.it-nw{margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)}.it-nl{font-size:9px;color:var(--t3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:3px}.it-nt{width:100%;background:var(--s);border:1px solid var(--bd);border-radius:5px;padding:6px 8px;font-size:11px;color:var(--t);font-family:'Noto Sans JP',sans-serif;outline:none;resize:vertical;min-height:32px}.it-nt:focus{border-color:var(--gold)}.ft{text-align:center;padding:28px 20px;font-size:10px;color:var(--t3);border-top:1px solid var(--bd)}.hidden{display:none!important}
+.loading-ov{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}.loading-ov.gone{display:none}.loading-spinner{width:36px;height:36px;border:3px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-text{font-size:13px;color:var(--t2)}@media(max-width:640px){.it-id{width:36px;font-size:8px}.it-nm{font-size:12px}.wd-d{width:5px;height:5px}.sts{gap:14px}.fb-s{width:100px}}
+</style>
+</head>
+<body>
+<div class="loading-ov" id="loading-ov"><div class="loading-spinner"></div><div class="loading-text">データを読み込み中…</div></div>
+<div class="toast" id="toast"></div>
+<div class="hd">
+  <div class="hd-ey">Content Orchestra — Management Dashboard</div>
+  <h1>調剤報酬ガイド <em>制作管理</em></h1>
+  <p class="hd-sub">Vercel + GAS + スプレッドシート リアルタイム管理</p>
+  <div class="conn loading" id="conn"><div class="conn-dot"></div><span id="conn-text">接続中…</span></div>
+  <button class="stog" onclick="document.getElementById('sp').classList.toggle('open')">⚙ GAS設定</button>
+  <div class="sp" id="sp"><div class="sp-in">
+    <div class="sp-lb">GAS DEPLOY URL</div>
+    <div class="sp-row"><input type="text" class="sp-input" id="gas-url-input" placeholder="https://script.google.com/macros/s/.../exec"><button class="sp-save" onclick="saveGasUrl()">接続</button></div>
+    <div class="sp-msg" id="sp-msg"></div>
+  </div></div>
+  <div class="now"><div class="now-lb">NOW WORKING ON</div><input type="text" class="now-in" id="now-task" placeholder="今やっていることを入力…" oninput="debounceNow()"></div>
+  <div class="gp"><div class="gp-tr"><div class="gp-fl" id="gp-fl"></div></div><div class="gp-lb" id="gp-lb">0%</div></div>
+  <div class="sts"><div class="st"><div class="st-n" id="s-tot" style="color:var(--w)">0</div><div class="st-l">全項目</div></div><div class="st"><div class="st-n" id="s-dn" style="color:var(--green)">0</div><div class="st-l">完了</div></div><div class="st"><div class="st-n" id="s-wp" style="color:var(--orange)">0</div><div class="st-l">作業中</div></div><div class="st"><div class="st-n" id="s-td" style="color:var(--t3)">0</div><div class="st-l">未着手</div></div></div>
+  <div class="ex-bar"><button class="ex-btn" onclick="syncFromGAS()">🔄 再読み込み</button><button class="ex-btn" onclick="exportJSON()">📥 Export JSON</button></div>
+</div>
+<div class="fb"><button class="fb-b on" onclick="setF('all',this)">ALL</button><button class="fb-b" onclick="setF('todo',this)">未着手</button><button class="fb-b" onclick="setF('wip',this)">作業中</button><button class="fb-b" onclick="setF('done',this)">完了</button><button class="fb-b" onclick="setF('high',this)">🔴 高</button><button class="fb-b" onclick="setF('mid',this)">🟡 中</button><button class="fb-b" onclick="setF('low',this)">⚪ 低</button><input type="text" class="fb-s" placeholder="検索…" oninput="searchQ=this.value;applyVis()"></div>
+<div class="mn" id="mn"></div>
+<div class="ft">Content Orchestra — Vercel + GAS + Spreadsheet</div>
+
+<script>
+let GAS_URL=localStorage.getItem('ov4_gas_url')||'';
+let gasMode=false;
+
+// =============================================
+// GAS通信: JSONP方式（scriptタグ経由）でCORS回避
+// GETはscriptタグのcallback、POSTはiframe+form
+// =============================================
+let jsonpCounter=0;
+
+function gasGet(){
+  return new Promise((resolve,reject)=>{
+    if(!GAS_URL){reject(new Error('No URL'));return}
+    const cbName='__gasCallback'+(jsonpCounter++);
+    const script=document.createElement('script');
+    // GASのdoGetにcallbackパラメータを追加
+    const url=GAS_URL+'?action=getAll&callback='+cbName;
+    window[cbName]=function(data){
+      delete window[cbName];
+      document.head.removeChild(script);
+      resolve(data);
+    };
+    script.onerror=function(){
+      delete window[cbName];
+      document.head.removeChild(script);
+      reject(new Error('JSONP failed'));
+    };
+    script.src=url;
+    document.head.appendChild(script);
+  });
+}
+
+function gasPost(body){
+  return new Promise((resolve,reject)=>{
+    if(!GAS_URL){reject(new Error('No URL'));return}
+    // iframeを使ってPOSTし、結果はpollingで取得しない
+    // 代わりにGETにパラメータとしてactionとdataを乗せる（データ量が小さいため可能）
+    const cbName='__gasCallback'+(jsonpCounter++);
+    const script=document.createElement('script');
+    const encoded=encodeURIComponent(JSON.stringify(body));
+    const url=GAS_URL+'?action=post&data='+encoded+'&callback='+cbName;
+    window[cbName]=function(data){
+      delete window[cbName];
+      document.head.removeChild(script);
+      resolve(data);
+    };
+    script.onerror=function(){
+      delete window[cbName];
+      document.head.removeChild(script);
+      reject(new Error('JSONP post failed'));
+    };
+    script.src=url;
+    document.head.appendChild(script);
+  });
+}
+
+function sendToGAS(body){
+  if(!GAS_URL){svLocal();return}
+  gasPost(body).then(r=>{
+    if(r&&r.ok)showToast('保存OK','ok');
+    else showToast('保存エラー','fail');
+  }).catch(()=>{showToast('通信エラー（ローカル保存済）','fail');svLocal()});
+}
+
+function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),2000)}
+
+const DATA=[
+{ch:'第1章',title:'調剤報酬の基本',sections:[{sec:'1-1',title:'調剤報酬の基本',items:[{id:'1-1-1',name:'調剤報酬の全体像（調剤技術料＋薬学管理料＋薬剤料＋特定保険医療材料料＋その他）'},{id:'1-1-2',name:'基礎点数と加算点数'}]},{sec:'1-2',title:'調剤報酬の算定単位',items:[{id:'1-2-1',name:'「調剤」「剤」について'},{id:'1-2-2',name:'処方せんの受付回数について'}]},{sec:'1-3',title:'分割調剤',items:[{id:'1-3-1',name:'14日超・保存困難による分割調剤'},{id:'1-3-2',name:'後発医薬品の初回分割調剤'},{id:'1-3-3',name:'医師の分割指示に係る分割調剤'}]},{sec:'1-4',title:'リフィル処方せん',items:[{id:'1-4-1',name:'リフィル処方せんとは'},{id:'1-4-2',name:'算定の流れと留意点'},{id:'1-4-3',name:'服薬情報等提供料との関係'}]},{sec:'1-5',title:'オンライン服薬指導',items:[{id:'1-5-1',name:'オンライン服薬指導の基本'},{id:'1-5-2',name:'対象となるケース'},{id:'1-5-3',name:'算定の流れと留意点'}]}]},
+{ch:'第2章',title:'調剤技術料',sections:[{sec:'2-1',title:'調剤技術料とは',items:[{id:'2-1',name:'調剤技術料とは'}]},{sec:'2-2',title:'調剤基本料',items:[{id:'2-2-1',name:'調剤基本料①〜③'},{id:'2-2-2',name:'特別調剤基本料A・B'}]},{sec:'2-3',title:'調剤基本料に係る加算・減算',items:[{id:'2-3-1',name:'地域支援・医薬品供給対応体制加算①〜⑤'},{id:'2-3-2',name:'連携強化加算'},{id:'2-3-3',name:'バイオ後続品調剤体制加算'},{id:'2-3-4',name:'後発医薬品減算'},{id:'2-3-5',name:'在宅薬学総合体制加算①②'},{id:'2-3-6',name:'電子的調剤情報連携体制整備加算'},{id:'2-3-7',name:'門前薬局等立地依存減算'}]},{sec:'2-4',title:'薬剤調製料',items:[{id:'2-4-1',name:'内服薬'},{id:'2-4-2',name:'屯服薬'},{id:'2-4-3',name:'浸煎薬・湯薬'},{id:'2-4-4',name:'注射薬'},{id:'2-4-5',name:'外用薬'}]},{sec:'2-5',title:'薬剤調製料に係る加算',items:[{id:'2-5-1',name:'麻薬等加算'},{id:'2-5-2',name:'無菌製剤処理加算'},{id:'2-5-3',name:'自家製剤加算'},{id:'2-5-4',name:'計量混合調剤加算'},{id:'2-5-5',name:'時間外等加算（時間外・休日・深夜）'},{id:'2-5-6',name:'夜間・休日等加算'}]}]},
+{ch:'第3章',title:'薬学管理料',sections:[{sec:'3-1',title:'薬学管理料とは',items:[{id:'3-1',name:'薬学管理料とは'}]},{sec:'3-2',title:'調剤管理料',items:[{id:'3-2',name:'調剤管理料'}]},{sec:'3-3',title:'調剤管理料に係る加算',items:[{id:'3-3-1',name:'調剤時残薬調整加算と薬学的有害事象等防止加算（イ〜ニ）'}]},{sec:'3-4',title:'服薬管理指導料',items:[{id:'3-4-1',name:'かかりつけ薬剤師とは'},{id:'3-4-2',name:'オンライン服薬指導との関係'}]},{sec:'3-5',title:'服薬管理指導料に係る加算',items:[{id:'3-5-1',name:'特定薬剤管理指導加算①②③'},{id:'3-5-2',name:'麻薬管理指導加算'},{id:'3-5-3',name:'乳幼児服薬指導加算'},{id:'3-5-4',name:'小児特定加算'},{id:'3-5-5',name:'吸入薬指導加算'},{id:'3-5-6',name:'かかりつけ薬剤師フォローアップ加算'},{id:'3-5-7',name:'かかりつけ薬剤師訪問加算'}]},{sec:'3-6',title:'外来服薬支援料',items:[{id:'3-6',name:'外来服薬支援料①・②'}]},{sec:'3-7',title:'外来服薬支援料に係る加算',items:[{id:'3-7-1',name:'施設連携加算'}]},{sec:'3-8',title:'服用薬剤調整支援料',items:[{id:'3-8',name:'服用薬剤調整支援料'}]},{sec:'3-9〜',title:'その他薬学管理料',items:[{id:'3-9',name:'調剤後薬剤管理指導料'},{id:'3-10',name:'服薬情報等提供料'},{id:'3-11',name:'経管投薬支援料'},{id:'3-12',name:'在宅患者訪問薬剤管理指導料'},{id:'3-13',name:'在宅患者訪問薬剤管理指導等に係る加算'},{id:'3-14',name:'在宅患者緊急訪問薬剤管理指導料'},{id:'3-15',name:'在宅患者緊急時等共同指導料'},{id:'3-16',name:'退院時共同指導料'},{id:'3-17',name:'在宅移行初期管理料'},{id:'3-18',name:'訪問薬剤管理医師同時指導料'},{id:'3-19',name:'複数名薬剤管理指導訪問料'}]}]},
+{ch:'第4章',title:'薬剤料',sections:[{sec:'4-1',title:'薬剤料',items:[{id:'4-1-1',name:'薬剤料の計算方法'},{id:'4-1-2',name:'多剤投与時の逓減措置'}]}]},
+{ch:'第5章',title:'特定保険医療材料料',sections:[{sec:'5-1',title:'特定保険医療材料料',items:[{id:'5-1',name:'特定保険医療材料料'}]}]},
+{ch:'第6章',title:'その他',sections:[{sec:'6-1〜',title:'その他',items:[{id:'6-1',name:'調剤ベースアップ評価料'},{id:'6-2',name:'調剤物価対応料'}]}]},
+{ch:'第7章',title:'介護報酬',sections:[{sec:'7-1〜',title:'介護報酬',items:[{id:'7-1',name:'居宅療養管理指導費'},{id:'7-2',name:'介護予防居宅療養管理指導費'},{id:'7-3',name:'単一建物居住者の考え方（医療保険との違い）'}]}]}
+];
+const WF=[
+{key:'s1',label:'デザイン作成',tag:'DESIGN',tc:'tg-d',sub:'Claude STARTLINE',deps:[],prompt:'「{ITEM}」を4つの公式資料から網羅的に抜粋しデザイン作成。\n手順：startline-writer → html-converter → checker\n資料外の情報は補完しない'},
+{key:'s2',label:'ファクトチェック①',tag:'CHECK',tc:'tg-c',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」のデザインHTMLを文字起こし→4資料と照合\n✅正確 ⚠️要修正 ❌誤り で報告'},
+{key:'s3',label:'競合調査',tag:'RESEARCH',tc:'tg-r',sub:'ChatGPT GPTs',deps:['s1'],prompt:'「{ITEM}」の競合調査。差分リスト＋追加推奨を優先度付きで出力'},
+{key:'s4',label:'デザイン修正→完成',tag:'DESIGN',tc:'tg-d',sub:'差分反映',deps:['s2','s3'],prompt:'「{ITEM}」のFC＋競合差分を反映し最終版に修正'},
+{key:'s5',label:'目次追記',tag:'FINAL',tc:'tg-f',sub:'ステータス更新',deps:['s4'],prompt:'目次に「{ITEM}」のステータスを追記'},
+{key:'s6',label:'最終ファクトチェック',tag:'CHECK',tc:'tg-c',sub:'完全照合',deps:['s4'],prompt:'「{ITEM}」最終版の完全ファクトチェック'},
+{key:'s7',label:'YouTube台本',tag:'YT',tc:'tg-y',sub:'youtube-script-writer',deps:['s3'],prompt:'「{ITEM}」のYouTube台本作成。誇張/煽りなし'},
+{key:'s8',label:'スライド',tag:'SLIDE',tc:'tg-s',sub:'slide-design-pro',deps:['s3'],prompt:'「{ITEM}」のスライド作成。全情報網羅'},
+{key:'s9',label:'note記事',tag:'NOTE',tc:'tg-n',sub:'note-article',deps:['s3'],prompt:'「{ITEM}」のnote記事作成。AI臭なし'}
+];
+
+let checks={},linksData={},pris={},nts={};let curF='all',searchQ='';
+const LS={ck:'ov4_ck',lk:'ov4_lk',pr:'ov4_pr',nt:'ov4_nt',nw:'ov4_nw'};
+function ldL(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return{}}}
+function svLocal(){try{localStorage.setItem(LS.ck,JSON.stringify(checks));localStorage.setItem(LS.lk,JSON.stringify(linksData));localStorage.setItem(LS.pr,JSON.stringify(pris));localStorage.setItem(LS.nt,JSON.stringify(nts))}catch(e){}}
+
+async function initLoad(){
+  const connEl=document.getElementById('conn'),connText=document.getElementById('conn-text');
+  if(!GAS_URL){
+    connEl.className='conn local';connText.textContent='GAS未接続（⚙設定からURLを入力）';
+    checks=ldL(LS.ck);linksData=ldL(LS.lk);pris=ldL(LS.pr);nts=ldL(LS.nt);
+    const nv=localStorage.getItem(LS.nw);if(nv)document.getElementById('now-task').value=nv;
+    document.getElementById('sp').classList.add('open');
+    render();document.getElementById('loading-ov').classList.add('gone');return;
+  }
+  try{
+    const data=await gasGet();
+    gasMode=true;connEl.className='conn ok';connText.textContent='GAS接続OK ✓';
+    if(data.items){data.items.forEach(it=>{
+      if(it.checks&&Object.keys(it.checks).length>0)checks[it.id]=it.checks;
+      if(it.links&&Object.keys(it.links).length>0)linksData[it.id]=it.links;
+      if(it.priority&&it.priority!=='none')pris[it.id]=it.priority;
+      if(it.note)nts[it.id]=it.note;
+    })}
+    if(data.nowTask)document.getElementById('now-task').value=data.nowTask;
+    svLocal();
+  }catch(err){
+    connEl.className='conn err';connText.textContent='GAS接続エラー（ローカル動作中）';
+    checks=ldL(LS.ck);linksData=ldL(LS.lk);pris=ldL(LS.pr);nts=ldL(LS.nt);
+    const nv=localStorage.getItem(LS.nw);if(nv)document.getElementById('now-task').value=nv;
+  }
+  render();document.getElementById('loading-ov').classList.add('gone');
+}
+async function syncFromGAS(){if(!GAS_URL){showToast('GAS_URL未設定','fail');return}document.getElementById('loading-ov').classList.remove('gone');checks={};linksData={};pris={};nts={};await initLoad();showToast('再読み込み完了','ok')}
+
+function saveGasUrl(){
+  const url=document.getElementById('gas-url-input').value.trim();const msg=document.getElementById('sp-msg');
+  if(!url){msg.style.color='var(--red)';msg.textContent='URLを入力してください';return}
+  if(!url.startsWith('https://script.google.com/')){msg.style.color='var(--red)';msg.textContent='GASのURLではありません';return}
+  localStorage.setItem('ov4_gas_url',url);GAS_URL=url;
+  msg.style.color='var(--gold)';msg.textContent='保存。接続テスト中…';
+  setTimeout(()=>{document.getElementById('sp').classList.remove('open');checks={};linksData={};pris={};nts={};initLoad()},500);
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fmtDate(ts){const d=new Date(ts);return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function isLocked(iid,wf){const ic=checks[iid]||{};return wf.deps.some(d=>!ic[d])}
+function lockMsg(iid,wf){const ic=checks[iid]||{};return '前提：'+wf.deps.filter(d=>!ic[d]).map(d=>(WF.find(w=>w.key===d)||{}).label||d).join('、')+'を先に完了'}
+const PRI_CYCLE=['none','high','mid','low'],PRI_LABELS={none:'—',high:'高',mid:'中',low:'低'};
+
+function render(){
+  const mn=document.getElementById('mn');let h='';
+  DATA.forEach((ch,ci)=>{
+    h+='<div class="ch" id="ch'+ci+'"><div class="ch-h" onclick="document.getElementById(\'ch'+ci+'\').classList.toggle(\'clp\')"><div class="ch-badge">'+ch.ch+'</div><div class="ch-t">'+ch.title+'</div><div class="ch-p" id="chp'+ci+'"></div><div class="ch-tog">▼</div></div><div class="ch-bd">';
+    ch.sections.forEach(sec=>{
+      h+='<div class="sg"><div class="sg-lb">'+sec.sec+'　'+sec.title+'</div>';
+      sec.items.forEach(it=>{
+        const iid=it.id,ic=checks[iid]||{},dc=WF.filter(w=>ic[w.key]).length,ad=dc===WF.length;
+        const st=dc===0?'todo':ad?'done':'wip';const pri=pris[iid]||'none';
+        let latest=0;Object.values(ic).forEach(v=>{if(typeof v==='number'&&v>latest)latest=v});
+        let vis=true;
+        if(curF==='todo'&&st!=='todo')vis=false;if(curF==='wip'&&st!=='wip')vis=false;if(curF==='done'&&st!=='done')vis=false;
+        if(curF==='high'&&pri!=='high')vis=false;if(curF==='mid'&&pri!=='mid')vis=false;if(curF==='low'&&pri!=='low')vis=false;
+        if(searchQ&&!it.name.includes(searchQ)&&!iid.includes(searchQ))vis=false;
+        h+='<div class="it '+(ad?'ad':'')+' '+(vis?'':'hidden')+'" data-id="'+iid+'" data-st="'+st+'" data-pri="'+pri+'"><div class="it-h" onclick="this.parentElement.classList.toggle(\'op\')"><div class="it-id">'+iid+'</div><div class="it-pri pri-'+pri+'" onclick="event.stopPropagation();cyclePri(\''+iid+'\')">'+PRI_LABELS[pri]+'</div><div class="it-nm">'+it.name+'</div>';
+        if(latest)h+='<div class="it-date">'+fmtDate(latest)+'</div>';
+        h+='<div class="wd">';WF.forEach(w=>{const dn=ic[w.key],lk=!dn&&isLocked(iid,w);h+='<div class="wd-d '+(dn?'dn':'')+' '+(lk?'lk':'')+'"></div>'});
+        h+='</div><div class="it-ch">▶</div></div><div class="it-dt"><div class="dt-in">';
+        WF.forEach(w=>{
+          const dn=ic[w.key],lk=!dn&&isLocked(iid,w),ts=dn&&typeof ic[w.key]==='number'?ic[w.key]:null;
+          const pr=w.prompt.replace(/\{ITEM\}/g,it.name);const ln=(linksData[iid]||{})[w.key]||'';
+          h+='<div class="wf">';
+          h+=lk?'<div class="wf-ck lk"></div>':'<div class="wf-ck '+(dn?'on':'')+'" onclick="event.stopPropagation();togWf(\''+iid+"','"+w.key+"')\"></div>";
+          h+='<div class="wf-i"><div class="wf-tl">'+w.label+' <span class="tg '+w.tc+'">'+w.tag+'</span></div><div class="wf-sb">'+w.sub+'</div>';
+          if(ts)h+='<div class="wf-ts">✓ '+fmtDate(ts)+'</div>';
+          if(lk)h+='<div class="wf-lk-msg">'+lockMsg(iid,w)+'</div>';
+          h+='<div class="wf-link-row"><input class="wf-link-in" placeholder="成果物URL…" value="'+esc(ln)+'" onchange="saveLink(\''+iid+"','"+w.key+"',this.value)\" onclick=\"event.stopPropagation()\">";
+          if(ln)h+='<a class="wf-link-go" href="'+esc(ln)+'" target="_blank" onclick="event.stopPropagation()">Open</a>';
+          h+='</div><div class="wf-pm" id="pm-'+iid+'-'+w.key+'"><div class="wf-pi"><button class="wf-cp" onclick="event.stopPropagation();doCopy(this)">COPY</button>'+esc(pr)+'</div></div></div>';
+          h+='<button class="wf-pb" onclick="event.stopPropagation();document.getElementById(\'pm-'+iid+'-'+w.key+"').classList.toggle('op')\">Prompt</button></div>";
+        });
+        const nv=nts[iid]||'';
+        h+='<div class="it-nw"><div class="it-nl">MEMO</div><textarea class="it-nt" placeholder="メモ…" onchange="saveNote(\''+iid+"',this.value)\" onclick=\"event.stopPropagation()\">"+esc(nv)+'</textarea></div>';
+        h+='</div></div></div>';
+      });h+='</div>';
+    });h+='</div></div>';
+  });mn.innerHTML=h;updStats();
+}
+
+function togWf(iid,key){
+  if(!checks[iid])checks[iid]={};
+  const was=!!checks[iid][key];
+  if(was){delete checks[iid][key];WF.forEach(w=>{if(w.deps.includes(key)&&checks[iid][w.key])delete checks[iid][w.key]});
+    sendToGAS({action:'updateCheck',itemId:iid,stepKey:key,checked:false,timestamp:0});
+    WF.forEach(w=>{if(w.deps.includes(key))sendToGAS({action:'updateCheck',itemId:iid,stepKey:w.key,checked:false,timestamp:0})});
+  }else{const ts=Date.now();checks[iid][key]=ts;sendToGAS({action:'updateCheck',itemId:iid,stepKey:key,checked:true,timestamp:ts})}
+  svLocal();render();
+}
+function cyclePri(iid){const cur=pris[iid]||'none',next=PRI_CYCLE[(PRI_CYCLE.indexOf(cur)+1)%PRI_CYCLE.length];pris[iid]=next;sendToGAS({action:'updatePriority',itemId:iid,priority:next});svLocal();const b=document.querySelector('.it[data-id="'+iid+'"] .it-pri');if(b){b.className='it-pri pri-'+next;b.textContent=PRI_LABELS[next]}}
+function saveLink(iid,key,val){if(!linksData[iid])linksData[iid]={};linksData[iid][key]=val;sendToGAS({action:'updateLink',itemId:iid,stepKey:key,url:val});svLocal()}
+function saveNote(iid,val){nts[iid]=val;sendToGAS({action:'updateNote',itemId:iid,note:val});svLocal()}
+let nowTimer;function debounceNow(){clearTimeout(nowTimer);nowTimer=setTimeout(()=>{const v=document.getElementById('now-task').value;sendToGAS({action:'updateNow',value:v});try{localStorage.setItem(LS.nw,v)}catch(e){}},1000)}
+function setF(f,btn){curF=f;document.querySelectorAll('.fb-b').forEach(b=>b.classList.remove('on'));btn.classList.add('on');applyVis()}
+function applyVis(){document.querySelectorAll('.it').forEach(el=>{const st=el.dataset.st,pri=el.dataset.pri,nm=el.querySelector('.it-nm').textContent,id=el.dataset.id;let v=true;if(curF==='todo'&&st!=='todo')v=false;if(curF==='wip'&&st!=='wip')v=false;if(curF==='done'&&st!=='done')v=false;if(curF==='high'&&pri!=='high')v=false;if(curF==='mid'&&pri!=='mid')v=false;if(curF==='low'&&pri!=='low')v=false;if(searchQ&&!nm.includes(searchQ)&&!id.includes(searchQ))v=false;el.classList.toggle('hidden',!v)})}
+function updStats(){let tot=0,dn=0,wp=0,td=0,tc=0,dcc=0;DATA.forEach((ch,ci)=>{let ct=0,cd=0;ch.sections.forEach(sec=>sec.items.forEach(it=>{tot++;ct++;const ic=checks[it.id]||{},d=WF.filter(w=>ic[w.key]).length;tc+=WF.length;dcc+=d;if(d===0)td++;else if(d===WF.length){dn++;cd++}else wp++}));const cpEl=document.getElementById('chp'+ci);if(cpEl)cpEl.textContent=cd+'/'+ct});document.getElementById('s-tot').textContent=tot;document.getElementById('s-dn').textContent=dn;document.getElementById('s-wp').textContent=wp;document.getElementById('s-td').textContent=td;const pct=tc?Math.round(dcc/tc*100):0;document.getElementById('gp-fl').style.width=pct+'%';document.getElementById('gp-lb').textContent=pct+'%'}
+function doCopy(btn){const bl=btn.parentElement,cl=bl.cloneNode(true);cl.querySelectorAll('.wf-cp').forEach(b=>b.remove());const tx=cl.textContent.trim();const ta=document.createElement('textarea');ta.value=tx;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;opacity:0';document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);if(ok){btn.textContent='✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok')},1500);return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tx).then(()=>{btn.textContent='✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok')},1500)}).catch(()=>{btn.textContent='選択済→Ctrl+C';setTimeout(()=>{btn.textContent='COPY'},3000)})}}
+function exportJSON(){const data={checks,links:linksData,pris,nts,now:document.getElementById('now-task').value,exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='orchestra_'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+
+document.getElementById('gas-url-input').value=GAS_URL;
+if(!GAS_URL)document.getElementById('sp').classList.add('open');
+initLoad();
+</script>
+</body>
+</html>
